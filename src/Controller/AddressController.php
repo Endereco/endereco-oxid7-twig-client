@@ -5,6 +5,7 @@ namespace Endereco\Oxid7Client\Controller;
 use Override;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Application\Model\Address;
+use OxidEsales\Eshop\Core\Registry;
 use  Endereco\Oxid7Client\Component\EnderecoService;
 
 class AddressController extends \OxidEsales\Eshop\Application\Controller\FrontendController
@@ -14,12 +15,44 @@ class AddressController extends \OxidEsales\Eshop\Application\Controller\Fronten
      */
     public function render()
     {
-        $data = json_decode(file_get_contents('php://input'), true);
+        if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
+            http_response_code(405);
+            echo 0;
+            exit();
+        }
+
+        if (!Registry::getSession()->checkSessionChallenge()) {
+            http_response_code(403);
+            echo 0;
+            exit();
+        }
+
+        $oCurrentUser = $this->getUser();
+        if (!$oCurrentUser) {
+            http_response_code(401);
+            echo 0;
+            exit();
+        }
+
+        $data = json_decode((string) file_get_contents('php://input'), true);
+        if (!is_array($data) || empty($data['method']) || !is_array($data['params'] ?? null)) {
+            http_response_code(400);
+            echo 0;
+            exit();
+        }
+
         $addressChanged = 1;
         if ('editBillingAddress' == $data['method']) {
+            $addressId = (string) ($data['params']['addressId'] ?? '');
+            if ('' === $addressId || $addressId !== (string) $oCurrentUser->getId()) {
+                http_response_code(403);
+                echo 0;
+                exit();
+            }
+
             // Save billing address.
             $oUser = oxNew(User::class);
-            if ($oUser->load($data['params']['addressId'])) {
+            if ($oUser->load($addressId)) {
                 $oUser->oxuser__oxzip->rawValue
                     = $data['params']['address']['postalCode']
                     ? $data['params']['address']['postalCode']
@@ -81,9 +114,22 @@ class AddressController extends \OxidEsales\Eshop\Application\Controller\Fronten
         }
 
         if ('editShippingAddress' == $data['method']) {
+            $addressId = (string) ($data['params']['addressId'] ?? '');
+            if ('' === $addressId) {
+                http_response_code(400);
+                echo 0;
+                exit();
+            }
+
             // Save shipping address.
             $oAddress = oxNew(Address::class);
-            if ($oAddress->load($data['params']['addressId'])) {
+            if ($oAddress->load($addressId)) {
+                if ((string) $oAddress->oxaddress__oxuserid->rawValue !== (string) $oCurrentUser->getId()) {
+                    http_response_code(403);
+                    echo 0;
+                    exit();
+                }
+
                 $oAddress->oxaddress__oxzip->rawValue
                     = $data['params']['address']['postalCode']
                     ? $data['params']['address']['postalCode']

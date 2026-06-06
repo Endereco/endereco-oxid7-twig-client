@@ -53,27 +53,11 @@
 
     <script>
         function enderecoLoadAMSConfig() {
-            window.EnderecoIntegrator.config.apiUrl = "{{ oViewConf.getModuleUrl('endereco-oxid7-client', 'proxy/io.php') }}";
-            window.EnderecoIntegrator.config.apiKey = '{{ enderecoclient.sAPIKEY }}';
-            window.EnderecoIntegrator.config.remoteApiUrl = '{{ enderecoclient.sSERVICEURL }}';
+            const enderecoConfig = JSON.parse(atob('{{ enderecoclient.sIntegratorConfigPayload }}'));
             window.EnderecoIntegrator.themeName = '{{ enderecoclient.sThemeName }}';
             window.EnderecoIntegrator.defaultCountry = '{{ enderecoclient.sPreselectableCountries }}';
             window.EnderecoIntegrator.defaultCountrySelect = {% if enderecoclient.bPreselectCountry  %}true{% else %}false{% endif %};
-            window.EnderecoIntegrator.config.showDebugInfo = {% if enderecoclient.bShowDebug  %}true{% else %}false{% endif %};
-            window.EnderecoIntegrator.config.trigger.onblur = {% if enderecoclient.sAMSBLURTRIGGER  %}true{% else %}false{% endif %};
-            window.EnderecoIntegrator.config.trigger.onsubmit = {% if enderecoclient.sAMSSubmitTrigger  %}true{% else %}false{% endif %};
-            window.EnderecoIntegrator.config.ux.resumeSubmit = {% if enderecoclient.sAMSResumeSubmit  %}true{% else %}false{% endif %};
-            window.EnderecoIntegrator.config.ux.smartFill = {% if enderecoclient.sSMARTFILL  %}true{% else %}false{% endif %};
-            window.EnderecoIntegrator.config.ux.checkExisting = {% if enderecoclient.sCHECKALL  %}true{% else %}false{% endif %};
-            window.EnderecoIntegrator.config.ux.changeFieldsOrder = {% if enderecoclient.bChangeFieldsOrder  %}true{% else %}false{% endif %};;
-            window.EnderecoIntegrator.config.ux.showEmailStatus = {% if enderecoclient.bShowEmailserviceErrors  %}true{% else %}false{% endif %};
-            window.EnderecoIntegrator.config.ux.useStandardCss = {% if enderecoclient.bUseCss  %}true{% else %}false{% endif %};
-            window.EnderecoIntegrator.config.ux.allowCloseModal = {% if enderecoclient.bAllowCloseModal  %}true{% else %}false{% endif %};
-            window.EnderecoIntegrator.config.ux.confirmWithCheckbox = {% if enderecoclient.bConfirmWithCheckbox  %}true{% else %}false{% endif %};
-            window.EnderecoIntegrator.config.ux.correctTranspositionedNames = {% if enderecoclient.bCorrectTranspositionedNames  %}true{% else %}false{% endif %};
-            window.EnderecoIntegrator.config.templates.primaryButtonClasses = 'btn btn-primary';
-            window.EnderecoIntegrator.config.templates.secondaryButtonClasses = 'btn btn-secondary';
-            window.EnderecoIntegrator.config.texts = {
+            enderecoConfig.texts = {
                 'popUpHeadline': '{{ popUpHeadline|raw }}',
                 'popUpSubline': '{{ popUpSubline|raw }}',
                 'mistakeNoPredictionSubline': '{{ mistakeNoPredictionSubline|raw }}',
@@ -118,6 +102,8 @@
                     "packstation_has_unresolvable_postnummer": '{{ packstationHasUnresolvablePostnummer|raw }}'
                 }
             };
+            window.EnderecoIntegrator.config = window.EnderecoIntegrator.config || {};
+            window.EnderecoIntegrator.config = Object.assign(window.EnderecoIntegrator.config, enderecoConfig);
             window.EnderecoIntegrator.activeServices = {
                 ams: {% if enderecoclient.sUSEAMS  %}true{% else %}false{% endif %},
                 emailService: {% if enderecoclient.bUseEmailservice  %}true{% else %}false{% endif %},
