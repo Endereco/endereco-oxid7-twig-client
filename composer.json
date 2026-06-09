@@ -40,14 +40,16 @@
             "@phpcs",
             "@phpmd",
             "@phpstan",
-            "@phpcompat"
+            "@phpcompat",
+            "@lint"
         ],
+        "lint": "npm run lint",
         "phpcbf": "phpcbf --standard=PSR12 --ignore=vendor/*,shops/*,node_modules/* ./src/**/*.php",
         "phpcs": "phpcs --standard=PSR12 --ignore=vendor/*,shops/*,node_modules/* ./src/**/*.php",
         "phpstan": [
-            "phpstan analyse -c phpstan.7.1.neon",
-            "phpstan analyse -c phpstan.7.2.neon",
-            "phpstan analyse -c phpstan.7.3.neon"
+            "phpstan analyse -c phpstan.7.1.neon --memory-limit=1G",
+            "phpstan analyse -c phpstan.7.2.neon --memory-limit=1G",
+            "phpstan analyse -c phpstan.7.3.neon --memory-limit=1G"
         ],
         "phpmd": "./check_phpmd.sh",
         "phpcompat": "bash test_php_versions.sh",
@@ -65,6 +67,7 @@
     "config": {
         "allow-plugins": {
             "ocramius/package-versions": true
-        }
+        },
+        "process-timeout": 0
     }
 }

@@ -5,20 +5,15 @@
 
     <script>
         ( function() {
-            var $interval = setInterval( function() {
-                if (window.EnderecoIntegrator && window.EnderecoIntegrator.ready) {
-                    window.EnderecoIntegrator.initEmailServices(
-                        '',
-                        {
-                            "name": "default",
-                            "postfixCollection": {
-                                "email": ".content [name=\"invadr[oxuser__oxusername]\"]"
-                            }
-                        }
-                    );
-                    clearInterval($interval);
+            enderecoInitES(
+                '',
+                {
+                    "name": "default",
+                    "postfixCollection": {
+                        "email": ".content [name=\"invadr[oxuser__oxusername]\"]"
+                    }
                 }
-            }, 100);
+            );
         })();
     </script>
 {% endblock %}

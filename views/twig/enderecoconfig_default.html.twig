@@ -32,7 +32,24 @@
     {% set localityNeedsCorrection = "ENDERECOOXID7CLIENT_STATUS_localityNeedsCorrection"|translate %}
     {% set postalCodeNeedsCorrection = "ENDERECOOXID7CLIENT_STATUS_postalCodeNeedsCorrection"|translate %}
     {% set countryCodeNeedsCorrection = "ENDERECOOXID7CLIENT_STATUS_countryCodeNeedsCorrection"|translate %}
-    {% set selectCountryFirst = "ENDERECOOXID7CLIENT_SELECT_COUNTRY_FIRST"|translate %}
+    {% set packstationHasMissingPostnummer = "ENDERECOOXID7CLIENT_STATUS_packstationHasMissingPostnummer"|translate %}
+    {% set phoneInvalid = "ENDERECOOXID7CLIENT_STATUS_phoneInvalid"|translate %}
+    {% set phoneFormatNeedsCorrection = "ENDERECOOXID7CLIENT_STATUS_phoneFormatNeedsCorrection"|translate %}
+    {% set phoneShouldBeFixed = "ENDERECOOXID7CLIENT_STATUS_phoneShouldBeFixed"|translate %}
+    {% set phoneShouldBeMobile = "ENDERECOOXID7CLIENT_STATUS_phoneShouldBeMobile"|translate %}
+    {% set addressHasMissingBuildingNumberContent = "ENDERECOOXID7CLIENT_ERROR_addressHasMissingBuildingNumberContent"|translate %}
+    {% set addressHasUnresolvableBuildingNumberContent = "ENDERECOOXID7CLIENT_ERROR_addressHasUnresolvableBuildingNumberContent"|translate %}
+    {% set packstationHasUnresolvableAddress = "ENDERECOOXID7CLIENT_ERROR_packstationHasUnresolvableAddress"|translate %}
+    {% set postofficeHasUnresolvableAddress = "ENDERECOOXID7CLIENT_ERROR_postofficeHasUnresolvableAddress"|translate %}
+    {% set packstationHasMissingPostnummerContent = "ENDERECOOXID7CLIENT_ERROR_packstationHasMissingPostnummer"|translate %}
+    {% set packstationHasUnresolvablePostnummer = "ENDERECOOXID7CLIENT_ERROR_packstationHasUnresolvablePostnummer"|translate %}
+    {% set hintFormatE164 = "ENDERECOOXID7CLIENT_HINT_hintFormatE164"|translate %}
+    {% set hintFormatInternational = "ENDERECOOXID7CLIENT_HINT_hintFormatInternational"|translate %}
+    {% set hintFormatNational = "ENDERECOOXID7CLIENT_HINT_hintFormatNational"|translate %}
+    {% set enderedoStreetLabel = "ENDERECOOXID7CLIENT_INPUT_enderedoStreetLabel"|translate %}
+    {% set enderedoStreetPlaceholder = "ENDERECOOXID7CLIENT_INPUT_enderedoStreetPlaceholder"|translate %}
+    {% set enderedoHousenumberLabel = "ENDERECOOXID7CLIENT_INPUT_enderedoHousenumberLabel"|translate %}
+    {% set enderedoHousenumberPlaceholder = "ENDERECOOXID7CLIENT_INPUT_enderedoHousenumberPlaceholder"|translate %}
 
     <script>
         function enderecoLoadAMSConfig() {
@@ -85,7 +102,20 @@
                     'street_name_needs_correction': '{{ streetNameNeedsCorrection|raw }}',
                     'locality_needs_correction': '{{ localityNeedsCorrection|raw }}',
                     'postal_code_needs_correction': '{{ postalCodeNeedsCorrection|raw }}',
-                    'country_code_needs_correction': '{{ countryCodeNeedsCorrection|raw }}'
+                    'country_code_needs_correction': '{{ countryCodeNeedsCorrection|raw }}',
+                    'packstation_has_missing_postnummer': '{{packstationHasMissingPostnummer|raw}}',
+                    "phone_invalid": '{{ phoneInvalid|raw }}',
+                    "phone_format_needs_correction": '{{ phoneFormatNeedsCorrection|raw }}',
+                    "phone_should_be_fixed": '{{ phoneShouldBeFixed|raw }}',
+                    "phone_should_be_mobile": '{{ phoneShouldBeMobile|raw }}'
+                },
+                "errorMessages": {
+                    "address_has_missing_building_number_content": '{{ addressHasMissingBuildingNumberContent|raw }}',
+                    "address_has_unresolvable_building_number_content": '{{ addressHasUnresolvableBuildingNumberContent|raw }}',
+                    "packstation_has_unresolvable_address": '{{ packstationHasUnresolvableAddress|raw }}',
+                    "postoffice_has_unresolvable_address": '{{ postofficeHasUnresolvableAddress|raw }}',
+                    "packstation_has_missing_postnummer": '{{ packstationHasMissingPostnummerContent|raw }}',
+                    "packstation_has_unresolvable_postnummer": '{{ packstationHasUnresolvablePostnummer|raw }}'
                 }
             };
             window.EnderecoIntegrator.activeServices = {
