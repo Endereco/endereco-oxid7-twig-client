@@ -61,6 +61,7 @@ $aModule = [
         'enderecoconfig' => \Endereco\Oxid7Client\Widget\IncludeConfigWidget::class,
         'enderecocolor' => \Endereco\Oxid7Client\Widget\IncludeColorWidget::class,
         'enderecosaveaddress' => \Endereco\Oxid7Client\Controller\AddressController::class,
+        'enderecoproxy' => \Endereco\Oxid7Client\Controller\ProxyController::class,
         'addresscheck' => \Endereco\Oxid7Client\Controller\Admin\Addresscheck::class,
     ],
     'extend' => [

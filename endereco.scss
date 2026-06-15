@@ -1,1 +1,20 @@
-@import './node_modules/@endereco/js-sdk/themes/oxid6-theme.scss';
+@use './node_modules/@endereco/js-sdk/themes/components/variables';
+@use './node_modules/@endereco/js-sdk/themes/components/mixins';
+@use './node_modules/@endereco/js-sdk/themes/components/predictions-dropdown';
+@use './node_modules/@endereco/js-sdk/themes/components/predictions-modal';
+@use './node_modules/@endereco/js-sdk/themes/components/statuses';
+@use './node_modules/@endereco/js-sdk/themes/components/statuslist';
+@use './node_modules/@endereco/js-sdk/themes/components/button';
+
+.form .endereco-predictions-wrapper + input[data-fieldsize="pair-xsmall"],
+.form .endereco-predictions-wrapper + css3-container + input[data-fieldsize="pair-xsmall"],
+.form .endereco-predictions-wrapper + input[data-fieldsize="xsmall"],
+.form .endereco-predictions-wrapper + css3-container + input[data-fieldsize="xsmall"],
+.form .endereco-predictions-wrapper + input[data-fieldsize="pair-small"],
+.form .endereco-predictions-wrapper + css3-container + input[data-fieldsize="pair-small"],
+.form .endereco-predictions-wrapper + input[data-fieldsize="small"],
+.form .endereco-predictions-wrapper + css3-container + input[data-fieldsize="small"],
+.form .endereco-predictions-wrapper + input[data-fieldsize="medium"],
+.form .endereco-predictions-wrapper + css3-container + input[data-fieldsize="medium"] {
+  margin-left: 5px;
+}

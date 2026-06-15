@@ -133,7 +133,74 @@ class IncludeConfigWidget extends \OxidEsales\Eshop\Application\Component\Widget
         $this->_aViewData['enderecoclient']['oSubdivisions'] = json_encode($aStates);
         $this->_aViewData['enderecoclient']['oSubdivisionMapping'] = json_encode($aStatesMapping);
         $this->_aViewData['enderecoclient']['oSubdivisionMappingReverse'] = json_encode($aStatesMappingReverse);
+        $this->_aViewData['enderecoclient']['sIntegratorConfigPayload'] = $this->buildIntegratorConfigPayload(
+            $this->_aViewData['enderecoclient'],
+            $oConfig
+        );
 
         return $this->getThisTemplate();
+    }
+
+    /**
+     * Builds the base64 encoded integrator config payload.
+     *
+     * The API key is intentionally not exposed to the frontend; RPC requests
+     * are forwarded server-side through the ProxyController (cl=enderecoproxy).
+     *
+     * @param array<string, mixed> $settings
+     * @param \OxidEsales\Eshop\Core\Config $config
+     *
+     * @return string
+     */
+    private function buildIntegratorConfigPayload($settings, $config)
+    {
+        $shopUrl = (string) $config->getCurrentShopUrl(false);
+        $stoken = Registry::getSession()->getSessionChallengeToken();
+        $apiUrl = $shopUrl . 'index.php?cl=enderecoproxy&stoken=' . $stoken;
+        $integratorConfig = [
+            'apiUrl' => $apiUrl,
+            'showDebugInfo' => $this->toBool($settings['bShowDebug'] ?? false),
+            'trigger' => [
+                'onblur' => $this->toBool($settings['sAMSBLURTRIGGER'] ?? false),
+                'onsubmit' => $this->toBool($settings['sAMSSubmitTrigger'] ?? false),
+            ],
+            'ux' => [
+                'resumeSubmit' => $this->toBool($settings['sAMSResumeSubmit'] ?? false),
+                'smartFill' => $this->toBool($settings['sSMARTFILL'] ?? false),
+                'checkExisting' => $this->toBool($settings['sCHECKALL'] ?? false),
+                'changeFieldsOrder' => $this->toBool($settings['bChangeFieldsOrder'] ?? false),
+                'showEmailStatus' => $this->toBool($settings['bShowEmailserviceErrors'] ?? false),
+                'useStandardCss' => $this->toBool($settings['bUseCss'] ?? false),
+                'allowCloseModal' => $this->toBool($settings['bAllowCloseModal'] ?? false),
+                'confirmWithCheckbox' => $this->toBool($settings['bConfirmWithCheckbox'] ?? false),
+                'correctTranspositionedNames' => $this->toBool($settings['bCorrectTranspositionedNames'] ?? false),
+            ],
+            'templates' => [
+                'primaryButtonClasses' => 'btn btn-primary',
+                'secondaryButtonClasses' => 'btn btn-secondary',
+            ],
+        ];
+
+        return base64_encode(json_encode($integratorConfig));
+    }
+
+    /**
+     * Normalizes a config value to a boolean.
+     *
+     * @param mixed $value
+     *
+     * @return bool
+     */
+    private function toBool($value)
+    {
+        if (is_bool($value)) {
+            return $value;
+        }
+
+        return in_array(
+            strtolower((string) $value),
+            ['1', 'true', 'yes', 'on'],
+            true
+        );
     }
 }

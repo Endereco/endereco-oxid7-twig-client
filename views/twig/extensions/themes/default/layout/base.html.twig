@@ -59,6 +59,27 @@
             }
         }
 
+        function enderecoInitES(prefix, config) {
+            if (undefined !== window.EnderecoIntegrator.initEmailServices) {
+                window.EnderecoIntegrator.initEmailServices(prefix, config);
+            } else {
+                window.EnderecoIntegrator.onLoad.push(function () {
+                    window.EnderecoIntegrator.initEmailServices(prefix, config);
+                });
+            }
+        }
+
+        function enderecoInitPS(prefix, config) {
+            if (undefined !== window.EnderecoIntegrator.initPersonServices) {
+                window.EnderecoIntegrator.initPersonServices(prefix, config);
+            } else {
+                window.EnderecoIntegrator.onLoad.push(function () {
+                    window.EnderecoIntegrator.initPersonServices(prefix, config);
+                });
+            }
+        }
+
+
     </script>
 {% endblock %}
 

@@ -45,5 +45,17 @@ $aLang = [
     'ENDERECOOXID7CLIENT_STATUS_localityNeedsCorrection' => 'L\'orthographe du lieu est incorrecte.',
     'ENDERECOOXID7CLIENT_STATUS_postalCodeNeedsCorrection' => 'Le code postal n\'est pas valide.',
     'ENDERECOOXID7CLIENT_STATUS_countryCodeNeedsCorrection' => 'L\'adresse saisie a été trouvée dans un autre pays.',
+    'ENDERECOOXID7CLIENT_STATUS_packstationHasMissingPostnummer' => 'Le numéro postal est manquant.',
+    'ENDERECOOXID7CLIENT_STATUS_phoneInvalid' => 'Le numéro de téléphone est invalide.',
+    'ENDERECOOXID7CLIENT_STATUS_phoneFormatNeedsCorrection' => 'Le numéro de téléphone a un format invalide.',
+    'ENDERECOOXID7CLIENT_STATUS_phoneShouldBeFixed' => 'Veuillez saisir un numéro de téléphone fixe.',
+    'ENDERECOOXID7CLIENT_STATUS_phoneShouldBeMobile' => 'Veuillez saisir un numéro de mobile.',
+    'ENDERECOOXID7CLIENT_ERROR_addressHasMissingBuildingNumberContent' => 'Le numéro de maison est manquant dans la saisie.',
+    'ENDERECOOXID7CLIENT_ERROR_addressHasUnresolvableBuildingNumberContent' => 'Le numéro de maison saisi n\'a pas permis de vérifier l\'adresse.',
+    'ENDERECOOXID7CLIENT_ERROR_packstationHasUnresolvableAddress' => 'L\'adresse Packstation est introuvable.',
+    'ENDERECOOXID7CLIENT_ERROR_postofficeHasUnresolvableAddress' => 'L\'adresse du bureau de poste est introuvable.',
+    'ENDERECOOXID7CLIENT_ERROR_packstationHasMissingPostnummer' => 'Le numéro postal est manquant dans la saisie.',
+    'ENDERECOOXID7CLIENT_ERROR_packstationHasUnresolvablePostnummer' => 'Le numéro postal est invalide.',
+
 ];
 
