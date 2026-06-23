@@ -3,3 +3,7 @@
 .gitignore
 .git
 docker-compose.yml
+shops/
+node_modules/
+vendor/
+.composer-cache/
