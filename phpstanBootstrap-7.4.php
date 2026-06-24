@@ -1,13 +1,13 @@
 <?php
 
-include "./shops/7.2/vendor/autoload.php";
-include "./shops/7.2/source/oxfunctions.php";
+require "./shops/7.4/vendor/autoload.php";
+require "./shops/7.4/source/oxfunctions.php";
 
 
 
 if (
-    class_exists('\OxidEsales\Eshop\Application\Controller\OrderController') &&
-    !class_exists('Endereco\Oxid7Client\Controller\OrderController_parent')
+    class_exists('\OxidEsales\Eshop\Application\Controller\OrderController')
+    && !class_exists('Endereco\Oxid7Client\Controller\OrderController_parent')
 ) {
     class_alias(
         '\OxidEsales\Eshop\Application\Controller\OrderController',
@@ -16,8 +16,8 @@ if (
 }
 
 if (
-    class_exists('OxidEsales\Eshop\Application\Component\UserComponent') &&
-    !class_exists('Endereco\Oxid7Client\Controller\UserComponent_parent')
+    class_exists('OxidEsales\Eshop\Application\Component\UserComponent')
+    && !class_exists('Endereco\Oxid7Client\Controller\UserComponent_parent')
 ) {
     class_alias(
         'OxidEsales\Eshop\Application\Component\UserComponent',
@@ -26,8 +26,8 @@ if (
 }
 
 if (
-    class_exists('OxidEsales\Eshop\Application\Model\User\UserShippingAddressUpdatableFields') &&
-    !class_exists('Endereco\Oxid7Client\Model\User\UserShippingAddressUpdatableFields_parent')
+    class_exists('OxidEsales\Eshop\Application\Model\User\UserShippingAddressUpdatableFields')
+    && !class_exists('Endereco\Oxid7Client\Model\User\UserShippingAddressUpdatableFields_parent')
 ) {
     class_alias(
         'OxidEsales\Eshop\Application\Model\User\UserShippingAddressUpdatableFields',
@@ -36,8 +36,8 @@ if (
 }
 
 if (
-    class_exists('OxidEsales\Eshop\Application\Model\User\UserUpdatableFields') &&
-    !class_exists('Endereco\Oxid7Client\Model\User\UserUpdatableFields_parent')
+    class_exists('OxidEsales\Eshop\Application\Model\User\UserUpdatableFields')
+    && !class_exists('Endereco\Oxid7Client\Model\User\UserUpdatableFields_parent')
 ) {
     class_alias(
         'OxidEsales\Eshop\Application\Model\User\UserUpdatableFields',
@@ -46,8 +46,8 @@ if (
 }
 
 if (
-    class_exists('OxidEsales\Eshop\Application\Controller\Admin\UserAddress') &&
-    !class_exists('Endereco\Oxid7Client\Controller\Admin\UserAddress_parent')
+    class_exists('OxidEsales\Eshop\Application\Controller\Admin\UserAddress')
+    && !class_exists('Endereco\Oxid7Client\Controller\Admin\UserAddress_parent')
 ) {
     class_alias(
         'OxidEsales\Eshop\Application\Controller\Admin\UserAddress',
@@ -56,8 +56,8 @@ if (
 }
 
 if (
-    class_exists('OxidEsales\Eshop\Application\Controller\Admin\UserMain') &&
-    !class_exists('Endereco\Oxid7Client\Controller\Admin\UserMain_parent')
+    class_exists('OxidEsales\Eshop\Application\Controller\Admin\UserMain')
+    && !class_exists('Endereco\Oxid7Client\Controller\Admin\UserMain_parent')
 ) {
     class_alias(
         'OxidEsales\Eshop\Application\Controller\Admin\UserMain',
@@ -66,8 +66,8 @@ if (
 }
 
 if (
-    class_exists('OxidEsales\Eshop\Application\Model\Order') &&
-    !class_exists('Endereco\Oxid7Client\Model\Order_parent')
+    class_exists('OxidEsales\Eshop\Application\Model\Order')
+    && !class_exists('Endereco\Oxid7Client\Model\Order_parent')
 ) {
     class_alias(
         'OxidEsales\Eshop\Application\Model\Order',
