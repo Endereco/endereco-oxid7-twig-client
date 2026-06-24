@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-versions=(7.1 7.2 7.3)
+versions=(7.1 7.2 7.3 7.4 7.5)
 
 base_dir="shops"
 cache_dir="$PWD/.composer-cache"
@@ -24,6 +24,12 @@ for version in "${versions[@]}"; do
       composer_image="composer:2.7.7"
       ;;
     7.3)
+      composer_image="composer:2.8.8"
+      ;;
+    7.4)
+      composer_image="composer:2.8.8"
+      ;;
+    7.5)
       composer_image="composer:2.8.8"
       ;;
     *)

@@ -8,6 +8,8 @@ parameters:
         - ./node_modules
     bootstrapFiles:
         - ./phpstanBootstrap-7.2.php
+    scanDirectories:
+        - ./shops/7.2/vendor/oxid-esales/oxideshop-unified-namespace-generator/generated
     treatPhpDocTypesAsCertain: false
     ignoreErrors:
         - message: "#^Access to an undefined property OxidEsales\\\\Eshop\\\\Application\\\\Model\\\\User::\\$#"
