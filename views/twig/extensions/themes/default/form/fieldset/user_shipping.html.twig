@@ -2,6 +2,11 @@
 
 {% block form_user_shipping_country %}
     {{ parent() }}
+    <input type="hidden"
+           data-endereco-subdivision-helper="shipping_ams"
+           data-country-id="{{ delivadr.oxaddress__oxcountryid.value }}"
+           data-selected-state-id="{{ delivadr.oxaddress__oxstateid.value }}"
+    >
 <input type="hidden" name="deladr[oxaddress__mojoamsts]" value="{% if isset( deladr.oxaddress__mojoamsts ) %}{{ deladr.oxaddress__mojoamsts }}{% else %}{{ delivadr.oxaddress__mojoamsts.value }}{% endif %}">
 <input type="hidden" name="deladr[oxaddress__mojoamsstatus]" value="{% if isset( deladr.oxaddress__mojoamsstatus ) %}{{ deladr.oxaddress__mojoamsstatus }}{% else %}{{ delivadr.oxaddress__mojoamsstatus.value }}{% endif %}">
 <input type="hidden" name="deladr[oxaddress__mojoamspredictions]" value="{% if isset( deladr.oxaddress__mojoamspredictions ) %}{{ deladr.oxaddress__mojoamspredictions }}{% else %}{{ delivadr.oxaddress__mojoamspredictions.value }}{% endif %}">
@@ -28,14 +33,6 @@
                 }
             });
 
-            if (window.EnderecoIntegrator) {
-                window.EnderecoIntegrator.initPersonServices(
-                    'deladr[oxaddress__',
-                    {
-                        name: 'shipping'
-                    }
-                );
-            }
         }
 
         enderecoInitAMS(
@@ -52,60 +49,20 @@
                 addressPredictions: '[name="deladr[oxaddress__mojoamspredictions]"]'
             },
             {
-                name: 'shipping',
+                name: 'shipping_ams',
                 addressType: 'shipping_address',
                 intent: 'edit'
             },
             afterCreateHandler
         );
-    </script>
-    {# Wenn "neue Adresse hinzufügen" gewählt wird, leert das Theme-Widget das Formular inkl. Land.
-       Wir setzen die Vorauswahl auf das Rechnungsland, sobald das Lieferadress-Formular sichtbar wird. #}
-    <script>
-        (function() {
-            function preselectDeliveryCountryFromBilling() {
-                var invSelect = document.getElementById('invCountrySelect');
-                var delSelect = document.getElementById('delCountrySelect');
-                var form = document.getElementById('shippingAddressForm');
-                if (!invSelect || !delSelect || !form) return;
-                if (form.style.display === 'none') return;
-                var billingCountry = (invSelect.value || '').trim();
-                if (!billingCountry) return;
-                var deliveryCountry = (delSelect.value || '').trim();
-                if (deliveryCountry) return;
-                delSelect.value = billingCountry;
-                if (typeof window.jQuery !== 'undefined') {
-                    var $el = window.jQuery(delSelect);
-                    if (typeof $el.selectpicker === 'function' && $el.data('selectpicker')) {
-                        $el.selectpicker('val', billingCountry);
-                        $el.selectpicker('refresh');
-                    } else {
-                        $el.trigger('change');
-                    }
-                } else {
-                    delSelect.dispatchEvent(new Event('change', { bubbles: true }));
-                }
+
+        enderecoInitPS(
+            'deladr[oxaddress__',
+            {
+                name: 'shipping',
             }
-            function onShippingAddressChoiceChange() {
-                var radios = document.querySelectorAll('input[name="oxaddressid"]');
-                radios.forEach(function(radio) {
-                    radio.addEventListener('change', function() {
-                        if (this.value === '-1') {
-                            setTimeout(preselectDeliveryCountryFromBilling, 50);
-                        }
-                    });
-                });
-            }
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', function() {
-                    onShippingAddressChoiceChange();
-                    setTimeout(preselectDeliveryCountryFromBilling, 100);
-                });
-            } else {
-                onShippingAddressChoiceChange();
-                setTimeout(preselectDeliveryCountryFromBilling, 100);
-            }
-        })();
+        );
+
     </script>
 
 {% endblock %}

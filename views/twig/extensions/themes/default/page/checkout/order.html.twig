@@ -3,8 +3,15 @@
 {% block checkout_order_address %}
 {{ parent() }}
 {% set sitepath = oViewConf.getBaseDir() %}
-<div style="display:none !important">
-    <div>
+    <input type="hidden"
+           data-endereco-subdivision-helper="billing_ams"
+           data-country-id="{{ oxcmp_user.oxuser__oxcountryid.value }}"
+           data-selected-state-id="{{ oxcmp_user.oxuser__oxstateid.value }}"
+    >
+    <div style="display:none !important">
+    {% set oBilAdressNeedsFeedback = oView.getShouldGatherBillingAddressFeedback() %}
+    {% if oBilAdressNeedsFeedback %}
+        <div>
         <form>
         <input
                 type="text"
@@ -36,7 +43,15 @@
                 id="endereco-billing-additional-info"
                 value="{% if oxcmp_user.oxuser__oxaddinfo.value %}{{ oxcmp_user.oxuser__oxaddinfo.value }}{% endif %}"
         >
-        <input
+            {% if oView.countryHasSubdivisions(oxcmp_user.oxuser__oxcountryid.value) %}
+                <input
+                    type="text"
+                    id="endereco-billing-subdivision-code"
+                    value="{{ oxcmp_user.oxuser__oxstateid.value }}"
+                >
+            {% endif %}
+
+            <input
                 type="text"
                 id="endereco-billing-status"
                 value="{% if oxcmp_user.oxuser__mojoamsstatus.value %}{{ oxcmp_user.oxuser__mojoamsstatus.value }}{% endif %}"
@@ -121,12 +136,15 @@
                         streetName: '#endereco-billing-street-name',
                         buildingNumber: '#endereco-billing-building-number',
                         additionalInfo: '#endereco-billing-additional-info',
+                        {% if oView.countryHasSubdivisions(oxcmp_user.oxuser__oxcountryid.value) %}
+                        subdivisionCode: '#endereco-billing-subdivision-code',
+                        {% endif %}
                         addressStatus: '#endereco-billing-status',
                         addressTimestamp: '#endereco-billing-timestamp',
                         addressPredictions: '#endereco-billing-predictions'
                     },
                     {
-                        name: 'billing',
+                        name: 'billing_ams',
                         addressType: 'billing_address',
                         intent: 'review'
                     },
@@ -135,9 +153,16 @@
             })();
         </script>
     </div>
+    {% endif %}
     <div>
         {% set oDelAdress = oView.getDelAddress() %}
-        {% if oDelAdress %}
+        {% set oDelAdressNeedsFeedback = oView.getShouldGatherShippingAddressFeedback() %}
+        {% if oDelAdress and oDelAdressNeedsFeedback %}
+            <input type="hidden"
+               data-endereco-subdivision-helper="shipping_ams"
+               data-country-id="{{ oDelAdress.oxaddress__oxcountryid.value }}"
+               data-selected-state-id="{{ oDelAdress.oxaddress__oxstateid.value }}"
+            >
         <div>
             <form>
             <input
@@ -170,6 +195,14 @@
                     id="endereco-shipping-additional-info"
                     value="{% if oDelAdress.oxaddress__oxaddinfo.value %}{{ oDelAdress.oxaddress__oxaddinfo.value }}{% endif %}"
             >
+                >
+                {% if oView.countryHasSubdivisions(oDelAdress.oxaddress__oxcountryid.value) %}
+                    <input
+                            type="text"
+                            id="endereco-shipping-subdivision-code"
+                            value="{{ oDelAdress.oxaddress__oxstateid.value }}"
+                    >
+                {% endif %}
             <input
                     type="text"
                     id="endereco-shipping-status"
@@ -254,13 +287,16 @@
                             locality: '#endereco-shipping-locality',
                             streetName: '#endereco-shipping-street-name',
                             buildingNumber: '#endereco-shipping-building-number',
+                            {% if oView.countryHasSubdivisions(oDelAdress.oxaddress__oxcountryid.value) %}
+                            subdivisionCode: '#endereco-shipping-subdivision-code',
+                            {% endif %}
                             addressStatus: '#endereco-shipping-status',
                             addressTimestamp: '#endereco-shipping-timestamp',
                             addressPredictions: '#endereco-shipping-predictions',
                             additionalInfo: '#endereco-shipping-additional-info',
                         },
                         {
-                            name: 'shipping',
+                            name: 'shipping_ams',
                             addressType: 'shipping_address',
                             intent: 'review'
                         },

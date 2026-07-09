@@ -12,6 +12,9 @@ use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Bridge\Sho
 
 class OrderController extends OrderController_parent
 {
+    private $shouldGatherBillingAddressFeedback = false;
+    private $shouldGatherShippingAddressFeedback = false;
+
     /**
      * Renders the order page and checks the addresses if necessary.
      * This method performs address validation for billing and delivery addresses
@@ -59,10 +62,19 @@ class OrderController extends OrderController_parent
                 $localLanguage = $oLang->getLanguageAbbr();
 
                 // Check invoice address.
-                if ($oUser && $this->isBillingHashMismatch($oUser)) {
+                if (
+                    $oUser
+                    && ($this->isBillingHashMismatch($oUser)
+                        || $this->isValidationNeeded($oUser->oxuser__mojoamsstatus->rawValue))
+                ) {
                     $oCountry = oxNew(Country::class);
                     $oCountry->load($oUser->oxuser__oxcountryid->rawValue);
                     $countryCode = strtolower($oCountry->oxcountry__oxisoalpha2->rawValue);
+
+                    $billingHasSubdivisions = $EnderecoService->countryHasSubdivisions(
+                        $oUser->oxuser__oxcountryid->rawValue
+                    );
+
 
                     $billingAddress = array(
                         'countryCode' => $countryCode,
@@ -81,6 +93,10 @@ class OrderController extends OrderController_parent
                         '__timestamp' => '',
                     );
 
+                    if ($billingHasSubdivisions) {
+                        $billingAddress['subdivisionCode'] = $oUser->oxuser__oxstateid->rawValue ?? '';
+                    }
+
                     // Check.
                     $checkedBillingAddress = $EnderecoService->checkAddress($billingAddress);
 
@@ -91,6 +107,7 @@ class OrderController extends OrderController_parent
                         $oUser->oxuser__mojoamspredictions->rawValue = $checkedBillingAddress['__predictions'];
                         $oUser->oxuser__mojoaddresshash->rawValue = $this->calculateHash(
                             $oUser->oxuser__oxcountryid->rawValue,
+                            $billingHasSubdivisions ? ($oUser->oxuser__oxstateid->rawValue ?? '') : null,
                             $oUser->oxuser__oxzip->rawValue,
                             $oUser->oxuser__oxcity->rawValue,
                             $oUser->oxuser__oxstreet->rawValue,
@@ -101,11 +118,26 @@ class OrderController extends OrderController_parent
                     }
                 }
 
+                if ($oUser) {
+                    $this->shouldGatherBillingAddressFeedback = $this->isFeedbackNeeded(
+                        (string) $oUser->oxuser__mojoamsstatus->rawValue
+                    );
+                }
+
+
                 // Check invoice address.
-                if ($oDeliveryAddress && $this->isDeliveryHashMismatch($oDeliveryAddress)) {
+                if (
+                    $oDeliveryAddress
+                    && ($this->isDeliveryHashMismatch($oDeliveryAddress)
+                        || $this->isValidationNeeded($oDeliveryAddress->oxaddress__mojoamsstatus->rawValue))
+                ) {
                     $oCountry = oxNew(Country::class);
                     $oCountry->load($oDeliveryAddress->oxaddress__oxcountryid->rawValue);
                     $countryCode = strtolower($oCountry->oxcountry__oxisoalpha2->rawValue);
+
+                    $shippingHasSubdivisions = $EnderecoService->countryHasSubdivisions(
+                        $oDeliveryAddress->oxaddress__oxcountryid->rawValue
+                    );
 
                     $shippingAddress = array(
                         'countryCode' => $countryCode,
@@ -124,6 +156,10 @@ class OrderController extends OrderController_parent
                         '__timestamp' => '',
                     );
 
+                    if ($shippingHasSubdivisions) {
+                        $shippingAddress['subdivisionCode'] = $oDeliveryAddress->oxaddress__oxstateid->rawValue ?? '';
+                    }
+
                     // Check.
                     $checkedShippingAddress = $EnderecoService->checkAddress($shippingAddress);
 
@@ -137,6 +173,7 @@ class OrderController extends OrderController_parent
                             = $checkedShippingAddress['__predictions'];
                         $oDeliveryAddress->oxaddress__mojoaddresshash->rawValue = $this->calculateHash(
                             $oDeliveryAddress->oxaddress__oxcountryid->rawValue,
+                            $shippingHasSubdivisions ? ($oDeliveryAddress->oxaddress__oxstateid->rawValue ?? '') : null,
                             $oDeliveryAddress->oxaddress__oxzip->rawValue,
                             $oDeliveryAddress->oxaddress__oxcity->rawValue,
                             $oDeliveryAddress->oxaddress__oxstreet->rawValue,
@@ -146,11 +183,29 @@ class OrderController extends OrderController_parent
                         $oDeliveryAddress->save();
                     }
                 }
+
+                if ($oDeliveryAddress) {
+                    $this->shouldGatherShippingAddressFeedback = $this->isFeedbackNeeded(
+                        (string) $oDeliveryAddress->oxaddress__mojoamsstatus->rawValue
+                    );
+                }
             }
         }
 
         return parent::render();
     }
+
+    /**
+     * Exposes the subdivision check to templates (called as $oView->countryHasSubdivisions()).
+     *
+     * @param string $countryId OXID internal country ID.
+     * @return bool
+     */
+    public function countryHasSubdivisions($countryId)
+    {
+        return (new EnderecoService())->countryHasSubdivisions($countryId);
+    }
+
 
     /**
      * Checks if the billing address hash is mismatched.
@@ -160,13 +215,18 @@ class OrderController extends OrderController_parent
      */
     private function isBillingHashMismatch($billingAddress)
     {
+        $hasSubdivisions = (new EnderecoService())->countryHasSubdivisions(
+            $billingAddress->oxuser__oxcountryid->rawValue
+        );
+
         $hash = $this->calculateHash(
-            $billingAddress->oxuser__oxcountryid->rawValue, // Country ID
-            $billingAddress->oxuser__oxzip->rawValue, // Postal code
-            $billingAddress->oxuser__oxcity->rawValue, // Locality
-            $billingAddress->oxuser__oxstreet->rawValue, // Street name
-            $billingAddress->oxuser__oxstreetnr->rawValue, // House number
-            $billingAddress->oxuser__oxaddinfo->rawValue // Additional info
+            $billingAddress->oxuser__oxcountryid->rawValue,
+            $hasSubdivisions ? ($billingAddress->oxuser__oxstateid->rawValue ?? '') : null,
+            $billingAddress->oxuser__oxzip->rawValue,
+            $billingAddress->oxuser__oxcity->rawValue,
+            $billingAddress->oxuser__oxstreet->rawValue,
+            $billingAddress->oxuser__oxstreetnr->rawValue,
+            $billingAddress->oxuser__oxaddinfo->rawValue
         );
 
         return $hash !== $billingAddress->oxuser__mojoaddresshash->rawValue;
@@ -180,13 +240,18 @@ class OrderController extends OrderController_parent
      */
     private function isDeliveryHashMismatch($deliveryAddress)
     {
+        $hasSubdivisions = (new EnderecoService())->countryHasSubdivisions(
+            $deliveryAddress->oxaddress__oxcountryid->rawValue
+        );
+
         $hash = $this->calculateHash(
-            $deliveryAddress->oxaddress__oxcountryid->rawValue, // Country ID
-            $deliveryAddress->oxaddress__oxzip->rawValue, // Postal code
-            $deliveryAddress->oxaddress__oxcity->rawValue, // Locality
-            $deliveryAddress->oxaddress__oxstreet->rawValue, // Street name
-            $deliveryAddress->oxaddress__oxstreetnr->rawValue, // House number
-            $deliveryAddress->oxaddress__oxaddinfo->rawValue // Additional info
+            $deliveryAddress->oxaddress__oxcountryid->rawValue,
+            $hasSubdivisions ? ($deliveryAddress->oxaddress__oxstateid->rawValue ?? '') : null,
+            $deliveryAddress->oxaddress__oxzip->rawValue,
+            $deliveryAddress->oxaddress__oxcity->rawValue,
+            $deliveryAddress->oxaddress__oxstreet->rawValue,
+            $deliveryAddress->oxaddress__oxstreetnr->rawValue,
+            $deliveryAddress->oxaddress__oxaddinfo->rawValue
         );
 
         return $hash !== $deliveryAddress->oxaddress__mojoaddresshash->rawValue;
@@ -196,7 +261,10 @@ class OrderController extends OrderController_parent
      * Calculates a hash based on the provided address components.
      * This is used to ensure the address integrity.
      *
+     * TODO: Extract to a shared location — duplicated in OrderController and UserComponent.
+     *
      * @param string $countryCode Country code of the address.
+     * @param string|null $subdivisionCode ISO 3166-2 subdivision code, or null if not applicable.
      * @param string $postalCode Postal code of the address.
      * @param string $locality Locality (city) of the address.
      * @param string $streetName Street name of the address.
@@ -206,6 +274,7 @@ class OrderController extends OrderController_parent
      */
     private function calculateHash(
         $countryCode,
+        $subdivisionCode,
         $postalCode,
         $locality,
         $streetName,
@@ -213,13 +282,100 @@ class OrderController extends OrderController_parent
         $additionalInfo
     ) {
         $hashBody = [
-            $countryCode,
-            $postalCode,
-            $locality,
-            $streetName,
-            $buildingNumber,
-            $additionalInfo
+            'countryCode' => $countryCode,
+            'postalCode' => $postalCode,
+            'locality' => $locality,
+            'streetName' => $streetName,
+            'buildingNumber' => $buildingNumber,
+            'additionalInfo' => $additionalInfo
+
         ];
-        return hash('sha256', implode('', $hashBody));
+        if ($subdivisionCode !== null) {
+            $hashBody['subdivisionCode'] = $subdivisionCode;
+        }
+        return hash('sha256', json_encode($hashBody));
+    }
+
+    /**
+     * Determines if a new AMS status check is needed based on the current AMS status of the address extension.
+     *
+     * A check is needed if the AMS status is empty or matches the constant AMS_STATUS_NOT_CHECKED
+     *
+     * @return bool True if a new AMS status check is required, false otherwise
+     */
+    public function isValidationNeeded($currentStatus): bool
+    {
+
+
+        $isEmpty = empty($currentStatus);
+
+        // The JS SDK may set 'not-checked' as a default status value. In practice this
+        // is always overwritten before form submission, but we check defensively.
+        // Not using a class constant because PHP 7.0 doesn't support constant visibility
+        // modifiers, and PSR-12 requires them.
+        $hasDefaultValue = ($currentStatus === 'not-checked');
+
+        $isCheckNeeded = $isEmpty || $hasDefaultValue;
+
+        return $isCheckNeeded;
+    }
+
+
+
+    /**
+     * Determines whether the saved AMS status indicates the user still needs
+     * to confirm or correct the address.
+     *
+     * An address counts as resolved once its status contains either
+     * 'address_selected_by_customer' or 'address_selected_automatically'.
+     * An empty or 'not-checked' status means no validation has run yet, so
+     * there is nothing to show in the popup and feedback is not gathered.
+     *
+     * Mirrors the JS SDK's isAddressCheckFinished predicate:
+     * https://github.com/Endereco/js-sdk/blob/master/modules/extensions/fields/AddressExtension.js
+     *
+     * @param string $currentStatus Comma-separated AMS status codes.
+     * @return bool True if the user still needs to act on the address.
+     */
+    private function isFeedbackNeeded(string $currentStatus): bool
+    {
+        if ($currentStatus === '' || $currentStatus === 'not-checked') {
+            return false;
+        }
+
+        $codes = array_map('trim', explode(',', $currentStatus));
+
+        return !in_array('address_selected_by_customer', $codes, true)
+            && !in_array('address_selected_automatically', $codes, true);
+    }
+
+    /**
+     * Returns whether billing address feedback should be gathered from the user.
+     *
+     * The flag reflects the saved AMS status of the billing address: feedback
+     * is needed when the status is non-empty and does not yet contain a
+     * "done" marker ('address_selected_by_customer' or
+     * 'address_selected_automatically').
+     *
+     * @return bool True if billing address feedback should be gathered, false otherwise.
+     */
+    public function getShouldGatherBillingAddressFeedback(): bool
+    {
+        return $this->shouldGatherBillingAddressFeedback;
+    }
+
+    /**
+     * Returns whether shipping address feedback should be gathered from the user.
+     *
+     * The flag reflects the saved AMS status of the delivery address: feedback
+     * is needed when the status is non-empty and does not yet contain a
+     * "done" marker ('address_selected_by_customer' or
+     * 'address_selected_automatically').
+     *
+     * @return bool True if shipping address feedback should be gathered, false otherwise.
+     */
+    public function getShouldGatherShippingAddressFeedback(): bool
+    {
+        return $this->shouldGatherShippingAddressFeedback;
     }
 }

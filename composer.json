@@ -39,8 +39,10 @@
             "@phpcs",
             "@phpmd",
             "@phpstan",
-            "@phpcompat"
+            "@phpcompat",
+            "@lint"
         ],
+        "lint": "npm run lint",
         "phpcbf": "phpcbf --standard=PSR12 ./src",
         "phpcs": "phpcs --standard=PSR12 ./src",
         "phpstan": [
@@ -62,5 +64,10 @@
             "chmod +x check_phpmd.sh",
             "cghooks update"
         ]
+    },
+    "config": {
+        "allow-plugins": {
+            "ocramius/package-versions": true
+        }
     }
 }
