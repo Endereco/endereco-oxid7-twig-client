@@ -4,7 +4,6 @@ namespace Endereco\Oxid7Client\Model\User;
 
 class UserUpdatableFields extends UserUpdatableFields_parent
 {
-
     public function getUpdatableFields()
     {
         $aReturn = parent::getUpdatableFields();

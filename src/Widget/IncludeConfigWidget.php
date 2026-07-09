@@ -65,11 +65,7 @@ class IncludeConfigWidget extends \OxidEsales\Eshop\Application\Component\Widget
             }
         }
 
-        if (property_exists($this, '_aViewParams')) {
-            $this->_aViewData['enderecoclient']['sControllerClass'] = $this->_aViewParams['curClass'];
-        } else {
-            $this->_aViewData['enderecoclient']['sControllerClass'] = '';
-        }
+        $this->_aViewData['enderecoclient']['sControllerClass'] = $this->_aViewParams['curClass'] ?? '';
 
         $this->_aViewData['enderecoclient']['sModuleVersion'] = $moduleConfiguration->getVersion();
 

@@ -7,7 +7,7 @@ use OxidEsales\Eshop\Application\Model\Order;
 
 class Addresscheck extends AdminController
 {
-
+    // phpcs:ignore PSR2.Classes.PropertyDeclaration.Underscore -- OXID core property, underscore prefix required
     protected $_sThisTemplate = '@endereco-oxid7-client/admin/addresscheck';
 
     private $predictions = [
@@ -30,7 +30,8 @@ class Addresscheck extends AdminController
         if ($oOrder->load($soxId)) {
             $this->_aViewData['mojoamsstatus'] = explode(",", $oOrder->oxorder__mojoamsstatus->rawValue);
             $this->_aViewData['mojoamsts'] = date("d-m-Y H:i:s", intval($oOrder->oxorder__mojoamsts->rawValue));
-            $this->_aViewData['mojoamspredictions'] = $this->getPredictions($oOrder->oxorder__mojoamspredictions->rawValue);
+            $this->_aViewData['mojoamspredictions'] =
+                $this->getPredictions($oOrder->oxorder__mojoamspredictions->rawValue);
             $this->_aViewData['mojonamescore'] = $oOrder->oxorder__mojonamescore->rawValue;
         }
 
@@ -48,14 +49,14 @@ class Addresscheck extends AdminController
         }
 
         return $predictions;
-
     }
 
     protected function getPredictionHtml($prediction)
     {
         $predictionHTML = "";
         foreach ($this->predictions as $predictionKey) {
-            $predictionHTML .= "<div class='prediction'>" . $predictionKey . ": " . $prediction->$predictionKey . "</div>";
+            $predictionHTML .= "<div class='prediction'>"
+                . $predictionKey . ": " . $prediction->$predictionKey . "</div>";
         }
 
         return $predictionHTML;

@@ -5,7 +5,7 @@ parameters:
     excludePaths:
         - ./shops
         - ./vendor
-        - ./node_modules
+        - ./node_modules (?)
     bootstrapFiles:
         - ./phpstanBootstrap-7.1.php
     scanDirectories:

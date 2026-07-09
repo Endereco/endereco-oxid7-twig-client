@@ -4,7 +4,6 @@ namespace Endereco\Oxid7Client\Model\User;
 
 class UserShippingAddressUpdatableFields extends UserShippingAddressUpdatableFields_parent
 {
-
     public function getUpdatableFields()
     {
         $aReturn = parent::getUpdatableFields();
