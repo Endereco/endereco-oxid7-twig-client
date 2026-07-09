@@ -2,6 +2,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { includeIgnoreFile } from '@eslint/compat';
 import js from '@eslint/js';
+import stylistic from '@stylistic/eslint-plugin';
 import globals from 'globals';
 
 const gitignorePath = path.resolve(
@@ -15,6 +16,9 @@ export default [
     js.configs.recommended,
     {
         files: ['endereco.js'],
+        plugins: {
+            '@stylistic': stylistic,
+        },
         languageOptions: {
             ecmaVersion: 'latest',
             sourceType: 'module',
@@ -39,11 +43,11 @@ export default [
                 { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
             ],
 
-            semi: ['error', 'always'],
-            quotes: ['error', 'single', { avoidEscape: true }],
-            indent: ['error', 4, { SwitchCase: 1 }],
-            'no-trailing-spaces': 'error',
-            'eol-last': ['error', 'always'],
+            '@stylistic/semi': ['error', 'always'],
+            '@stylistic/quotes': ['error', 'single', { avoidEscape: true }],
+            '@stylistic/indent': ['error', 4, { SwitchCase: 1 }],
+            '@stylistic/no-trailing-spaces': 'error',
+            '@stylistic/eol-last': ['error', 'always'],
         },
     },
 ];
