@@ -195,7 +195,6 @@
                     id="endereco-shipping-additional-info"
                     value="{% if oDelAdress.oxaddress__oxaddinfo.value %}{{ oDelAdress.oxaddress__oxaddinfo.value }}{% endif %}"
             >
-                >
                 {% if oView.countryHasSubdivisions(oDelAdress.oxaddress__oxcountryid.value) %}
                     <input
                             type="text"
