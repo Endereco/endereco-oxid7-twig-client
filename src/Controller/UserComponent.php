@@ -121,7 +121,7 @@ class UserComponent extends UserComponent_parent
                             'Content-Type' => 'application/json',
                             'X-Auth-Key' => $sApiKy,
                             'X-Transaction-Id' => $sSessionId,
-                            'X-Transaction-Referer' => $_SERVER['HTTP_REFERER'] ? $_SERVER['HTTP_REFERER'] : __FILE__,
+                            'X-Transaction-Referer' => EnderecoService::getTransactionReferer(),
                             'X-Agent' => $sAgentInfo,
                         ];
                         $request = new Request('POST', $sEndpoint, $newHeaders, json_encode($message));
@@ -147,7 +147,7 @@ class UserComponent extends UserComponent_parent
                     'Content-Type' => 'application/json',
                     'X-Auth-Key' => $sApiKy,
                     'X-Transaction-Id' => 'not_required',
-                    'X-Transaction-Referer' => $_SERVER['HTTP_REFERER'] ? $_SERVER['HTTP_REFERER'] : __FILE__,
+                    'X-Transaction-Referer' => EnderecoService::getTransactionReferer(),
                     'X-Agent' => $sAgentInfo,
                 ];
                 $request = new Request('POST', $sEndpoint, $newHeaders, json_encode($message));

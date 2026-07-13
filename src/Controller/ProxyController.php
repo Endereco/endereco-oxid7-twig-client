@@ -7,6 +7,7 @@ use GuzzleHttp\Psr7\Request;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Bridge\ModuleConfigurationDaoBridgeInterface;
+use Endereco\Oxid7Client\Component\EnderecoService;
 
 class ProxyController extends \OxidEsales\Eshop\Application\Controller\FrontendController
 {
@@ -62,16 +63,12 @@ class ProxyController extends \OxidEsales\Eshop\Application\Controller\FrontendC
             $transactionId = bin2hex(random_bytes(8));
         }
 
-        $transactionReferer = isset($_SERVER['HTTP_REFERER'])
-            ? (string) $_SERVER['HTTP_REFERER']
-            : __FILE__;
-
         $client = new Client(['timeout' => 8.0]);
         $headers = [
             'Content-Type' => 'application/json',
             'X-Auth-Key' => $apiKey,
             'X-Transaction-Id' => $transactionId,
-            'X-Transaction-Referer' => $transactionReferer,
+            'X-Transaction-Referer' => EnderecoService::getTransactionReferer(),
             'X-Agent' => $agentInfo,
         ];
 
