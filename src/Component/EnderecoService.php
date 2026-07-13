@@ -117,7 +117,7 @@ class EnderecoService
                             'Content-Type' => 'application/json',
                             'X-Auth-Key' => $sApiKy,
                             'X-Transaction-Id' => $sSessionId,
-                            'X-Transaction-Referer' => $_SERVER['HTTP_REFERER'] ? $_SERVER['HTTP_REFERER'] : __FILE__,
+                            'X-Transaction-Referer' => self::getTransactionReferer(),
                             'X-Agent' => $sAgentInfo,
                         ];
                         $request = new Request('POST', $sEndpoint, $newHeaders, json_encode($message));
@@ -143,7 +143,7 @@ class EnderecoService
                     'Content-Type' => 'application/json',
                     'X-Auth-Key' => $sApiKy,
                     'X-Transaction-Id' => 'not_required',
-                    'X-Transaction-Referer' => $_SERVER['HTTP_REFERER'] ? $_SERVER['HTTP_REFERER'] : __FILE__,
+                    'X-Transaction-Referer' => self::getTransactionReferer(),
                     'X-Agent' => $sAgentInfo,
                 ];
                 $request = new Request('POST', $sEndpoint, $newHeaders, json_encode($message));
@@ -185,7 +185,7 @@ class EnderecoService
                 'Content-Type' => 'application/json',
                 'X-Auth-Key' => $this->apiKey,
                 'X-Transaction-Id' => $sSessionId,
-                'X-Transaction-Referer' => $_SERVER['HTTP_REFERER'] ? $_SERVER['HTTP_REFERER'] : __FILE__,
+                'X-Transaction-Referer' => self::getTransactionReferer(),
                 'X-Agent' => $this->moduleVer,
             ];
 
@@ -247,7 +247,7 @@ class EnderecoService
                 'Content-Type' => 'application/json',
                 'X-Auth-Key' => $this->apiKey,
                 'X-Transaction-Id' => $sSessionId,
-                'X-Transaction-Referer' => $_SERVER['HTTP_REFERER'] ? $_SERVER['HTTP_REFERER'] : __FILE__,
+                'X-Transaction-Referer' => self::getTransactionReferer(),
                 'X-Agent' => $this->moduleVer,
             ];
             $request = new Request('POST', $this->endpoint, $newHeaders, json_encode($message));
@@ -270,7 +270,7 @@ class EnderecoService
                     'Content-Type' => 'application/json',
                     'X-Auth-Key' => $this->apiKey,
                     'X-Transaction-Id' => 'not_required',
-                    'X-Transaction-Referer' => $_SERVER['HTTP_REFERER'] ? $_SERVER['HTTP_REFERER'] : __FILE__,
+                    'X-Transaction-Referer' => self::getTransactionReferer(),
                     'X-Agent' => $this->moduleVer,
                 ];
                 $request = new Request('POST', $this->endpoint, $newHeaders, json_encode($message));
@@ -281,6 +281,11 @@ class EnderecoService
         }
 
         return $address;
+    }
+
+    public static function getTransactionReferer(): string
+    {
+        return $_SERVER['HTTP_REFERER'] ?? Registry::getConfig()->getShopUrl();
     }
 
     public function generateSessionId()
