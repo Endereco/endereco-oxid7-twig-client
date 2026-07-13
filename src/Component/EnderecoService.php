@@ -201,7 +201,7 @@ class EnderecoService
                 $counter = 0;
                 foreach ($result['predictions'] as $prediction) {
                     $tempAddress = array(
-                        'countryCode' => $prediction['countryCode']
+                        'countryCode' => $prediction['country']
                             ?: $address['countryCode'],
                         'postalCode' => $prediction['postCode'],
                         'locality' => $prediction['cityName'],
