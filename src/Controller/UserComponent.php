@@ -42,7 +42,11 @@ class UserComponent extends UserComponent_parent
                 $oUser->oxuser__oxstreetnr->rawValue,
                 $oUser->oxuser__oxaddinfo->rawValue
             );
-            if ($hash !== ($oUser->oxuser__mojoaddresshash->rawValue ?? '')) {
+            $storedHash = $oUser->oxuser__mojoaddresshash->rawValue ?? '';
+            if (
+                $hash !== $storedHash
+                && ($storedHash !== '' || $this->hasAmsDataToInvalidate($oUser, 'oxuser__mojo'))
+            ) {
                 $oUser->oxuser__mojoamsstatus->rawValue = '';
                 $oUser->oxuser__mojoamsts->rawValue = '';
                 $oUser->oxuser__mojoamspredictions->rawValue = '';
@@ -65,7 +69,11 @@ class UserComponent extends UserComponent_parent
                     $oSelectedAddress->oxaddress__oxstreetnr->rawValue,
                     $oSelectedAddress->oxaddress__oxaddinfo->rawValue
                 );
-                if ($hash !== ($oSelectedAddress->oxaddress__mojoaddresshash->rawValue ?? '')) {
+                $storedHash = $oSelectedAddress->oxaddress__mojoaddresshash->rawValue ?? '';
+                if (
+                    $hash !== $storedHash
+                    && ($storedHash !== '' || $this->hasAmsDataToInvalidate($oSelectedAddress, 'oxaddress__mojo'))
+                ) {
                     $oSelectedAddress->oxaddress__mojoamsstatus->rawValue = '';
                     $oSelectedAddress->oxaddress__mojoamsts->rawValue = '';
                     $oSelectedAddress->oxaddress__mojoamspredictions->rawValue = '';
@@ -302,6 +310,21 @@ class UserComponent extends UserComponent_parent
         }
 
         return $return;
+    }
+
+    /**
+     * Whether the object still holds AMS status, timestamp, or predictions
+     * that a hash-mismatch invalidation in render() would need to clear.
+     *
+     * @param \OxidEsales\Eshop\Application\Model\User|\OxidEsales\Eshop\Application\Model\Address $oObject
+     * @param string $sFieldPrefix e.g. 'oxuser__mojo' or 'oxaddress__mojo'
+     * @return bool
+     */
+    private function hasAmsDataToInvalidate($oObject, $sFieldPrefix)
+    {
+        return ($oObject->{$sFieldPrefix . 'amsstatus'}->rawValue ?? '') !== ''
+            || ($oObject->{$sFieldPrefix . 'amsts'}->rawValue ?? '') !== ''
+            || ($oObject->{$sFieldPrefix . 'amspredictions'}->rawValue ?? '') !== '';
     }
 
     /**
