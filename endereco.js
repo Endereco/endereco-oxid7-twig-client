@@ -45,12 +45,16 @@ EnderecoIntegrator.postfix = {
 EnderecoIntegrator.css = css[0][1];
 EnderecoIntegrator.resolvers.countryCodeWrite = function (value, _subscriber) {
     return new Promise(function (resolve, _reject) {
-        resolve(window.EnderecoIntegrator.countryMapping[value.toUpperCase()]);
+        const mapping = window.EnderecoIntegrator?.countryMapping || {};
+        const key = mapping[value.toUpperCase()];
+        resolve(key !== undefined ? key : '');
     });
 };
 EnderecoIntegrator.resolvers.countryCodeRead = function (value, _subscriber) {
     return new Promise(function (resolve, _reject) {
-        resolve(window.EnderecoIntegrator.countryMappingReverse[value]);
+        const mapping = window.EnderecoIntegrator?.countryMappingReverse || {};
+        const key = mapping[value];
+        resolve(key !== undefined ? key : '');
     });
 };
 
