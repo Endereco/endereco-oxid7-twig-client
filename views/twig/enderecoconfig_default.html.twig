@@ -139,6 +139,27 @@
     </script>
     <script async defer src="{{ oViewConf.getModuleUrl('endereco-oxid7-client', 'js/endereco.min.js') }}?ver={{ enderecoclient.sModuleVersion }}"></script>
     {{ include_widget({ cl: "enderecocolor" }) }}
+    {% if 'user' == enderecoclient.sControllerClass %}
+        <script>
+            (function() {
+                const addressType = sessionStorage.getItem('enderecoReopenAddressType');
+                if (!addressType) {
+                    return;
+                }
+                sessionStorage.removeItem('enderecoReopenAddressType');
+
+                document.addEventListener('DOMContentLoaded', function() {
+                    const editButtonSelector = 'shipping_address' === addressType
+                        ? '.dd-edit-shipping-address'
+                        : '#userChangeAddress';
+                    const editButton = document.querySelector(editButtonSelector);
+                    if (editButton) {
+                        editButton.click();
+                    }
+                });
+            })();
+        </script>
+    {% endif %}
 {% endif %}
 
 
