@@ -115,6 +115,7 @@
 
                     EAO.waitForAllExtension().then(function() {
                         EAO.onEditAddress.push(function() {
+                            sessionStorage.setItem('enderecoReopenAddressType', 'billing_address');
                             document.querySelectorAll('#orderAddress form')[0].submit();
                         });
 
@@ -266,6 +267,7 @@
 
                         EAO.waitForAllExtension().then(function() {
                             EAO.onEditAddress.push(function() {
+                                sessionStorage.setItem('enderecoReopenAddressType', 'shipping_address');
                                 document.querySelectorAll('#orderAddress form')[1].submit();
                             });
 
