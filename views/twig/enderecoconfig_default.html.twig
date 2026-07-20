@@ -58,48 +58,48 @@
             window.EnderecoIntegrator.defaultCountry = '{{ enderecoclient.sPreselectableCountries }}';
             window.EnderecoIntegrator.defaultCountrySelect = {% if enderecoclient.bPreselectCountry  %}true{% else %}false{% endif %};
             enderecoConfig.texts = {
-                'popUpHeadline': '{{ popUpHeadline|raw }}',
-                'popUpSubline': '{{ popUpSubline|raw }}',
-                'mistakeNoPredictionSubline': '{{ mistakeNoPredictionSubline|raw }}',
-                'notFoundSubline': '{{ notFoundSubline|raw }}',
-                'confirmMyAddressCheckbox': '{{ confirmMyAddressCheckbox|raw }}',
-                'yourInput': '{{ yourInput|raw }}',
-                'editYourInput': '{{ editYourInput|raw }}',
-                'ourSuggestions': '{{ ourSuggestions|raw }}',
-                'useSelected': '{{ useSelected|raw }}',
-                'confirmAddress': '{{ confirmAddress|raw }}',
-                'editAddress': '{{ editAddress|raw }}',
-                'warningText': '{{ warningText|raw }}',
-                'selectCountryFirst': '{{ selectCountryFirst|raw }}',
+                'popUpHeadline': '{{ popUpHeadline|escape('js') }}',
+                'popUpSubline': '{{ popUpSubline|escape('js') }}',
+                'mistakeNoPredictionSubline': '{{ mistakeNoPredictionSubline|escape('js') }}',
+                'notFoundSubline': '{{ notFoundSubline|escape('js') }}',
+                'confirmMyAddressCheckbox': '{{ confirmMyAddressCheckbox|escape('js') }}',
+                'yourInput': '{{ yourInput|escape('js') }}',
+                'editYourInput': '{{ editYourInput|escape('js') }}',
+                'ourSuggestions': '{{ ourSuggestions|escape('js') }}',
+                'useSelected': '{{ useSelected|escape('js') }}',
+                'confirmAddress': '{{ confirmAddress|escape('js') }}',
+                'editAddress': '{{ editAddress|escape('js') }}',
+                'warningText': '{{ warningText|escape('js') }}',
+                'selectCountryFirst': '{{ selectCountryFirst|escape('js') }}',
                 popupHeadlines: {
-                    'general_address': '{{ generalAddress|raw }}',
-                    'billing_address': '{{ billingAddress|raw }}',
-                    'shipping_address': '{{ shippingAddress|raw }}'
+                    'general_address': '{{ generalAddress|escape('js') }}',
+                    'billing_address': '{{ billingAddress|escape('js') }}',
+                    'shipping_address': '{{ shippingAddress|escape('js') }}'
                 },
                 statuses: {
-                    'email_not_correct': '{{ emailNotCorrect|raw }}',
-                    'email_cant_receive': '{{ emailVantReceive|raw }}',
-                    'email_syntax_error': '{{ emailSyntaxError|raw }}',
-                    'email_no_mx': '{{ emailNoMx|raw }}',
-                    'building_number_is_missing': '{{ buildingNumberIsMissing|raw }}',
-                    'building_number_not_found': '{{ buildingNumberNotFound|raw }}',
-                    'street_name_needs_correction': '{{ streetNameNeedsCorrection|raw }}',
-                    'locality_needs_correction': '{{ localityNeedsCorrection|raw }}',
-                    'postal_code_needs_correction': '{{ postalCodeNeedsCorrection|raw }}',
-                    'country_code_needs_correction': '{{ countryCodeNeedsCorrection|raw }}',
-                    'packstation_has_missing_postnummer': '{{packstationHasMissingPostnummer|raw}}',
-                    "phone_invalid": '{{ phoneInvalid|raw }}',
-                    "phone_format_needs_correction": '{{ phoneFormatNeedsCorrection|raw }}',
-                    "phone_should_be_fixed": '{{ phoneShouldBeFixed|raw }}',
-                    "phone_should_be_mobile": '{{ phoneShouldBeMobile|raw }}'
+                    'email_not_correct': '{{ emailNotCorrect|escape('js') }}',
+                    'email_cant_receive': '{{ emailVantReceive|escape('js') }}',
+                    'email_syntax_error': '{{ emailSyntaxError|escape('js') }}',
+                    'email_no_mx': '{{ emailNoMx|escape('js') }}',
+                    'building_number_is_missing': '{{ buildingNumberIsMissing|escape('js') }}',
+                    'building_number_not_found': '{{ buildingNumberNotFound|escape('js') }}',
+                    'street_name_needs_correction': '{{ streetNameNeedsCorrection|escape('js') }}',
+                    'locality_needs_correction': '{{ localityNeedsCorrection|escape('js') }}',
+                    'postal_code_needs_correction': '{{ postalCodeNeedsCorrection|escape('js') }}',
+                    'country_code_needs_correction': '{{ countryCodeNeedsCorrection|escape('js') }}',
+                    'packstation_has_missing_postnummer': '{{packstationHasMissingPostnummer|escape('js')}}',
+                    "phone_invalid": '{{ phoneInvalid|escape('js') }}',
+                    "phone_format_needs_correction": '{{ phoneFormatNeedsCorrection|escape('js') }}',
+                    "phone_should_be_fixed": '{{ phoneShouldBeFixed|escape('js') }}',
+                    "phone_should_be_mobile": '{{ phoneShouldBeMobile|escape('js') }}'
                 },
                 "errorMessages": {
-                    "address_has_missing_building_number_content": '{{ addressHasMissingBuildingNumberContent|raw }}',
-                    "address_has_unresolvable_building_number_content": '{{ addressHasUnresolvableBuildingNumberContent|raw }}',
-                    "packstation_has_unresolvable_address": '{{ packstationHasUnresolvableAddress|raw }}',
-                    "postoffice_has_unresolvable_address": '{{ postofficeHasUnresolvableAddress|raw }}',
-                    "packstation_has_missing_postnummer": '{{ packstationHasMissingPostnummerContent|raw }}',
-                    "packstation_has_unresolvable_postnummer": '{{ packstationHasUnresolvablePostnummer|raw }}'
+                    "address_has_missing_building_number_content": '{{ addressHasMissingBuildingNumberContent|escape('js') }}',
+                    "address_has_unresolvable_building_number_content": '{{ addressHasUnresolvableBuildingNumberContent|escape('js') }}',
+                    "packstation_has_unresolvable_address": '{{ packstationHasUnresolvableAddress|escape('js') }}',
+                    "postoffice_has_unresolvable_address": '{{ postofficeHasUnresolvableAddress|escape('js') }}',
+                    "packstation_has_missing_postnummer": '{{ packstationHasMissingPostnummerContent|escape('js') }}',
+                    "packstation_has_unresolvable_postnummer": '{{ packstationHasUnresolvablePostnummer|escape('js') }}'
                 }
             };
             window.EnderecoIntegrator.config = window.EnderecoIntegrator.config || {};
@@ -110,13 +110,13 @@
                 personService: {% if enderecoclient.bUsePersonalService  %}true{% else %}false{% endif %}
             }
 
-            window.EnderecoIntegrator.countryCodeToNameMapping = JSON.parse('{{ enderecoclient.sCountries|raw }}');
-            window.EnderecoIntegrator.countryMapping = JSON.parse('{{ enderecoclient.oCountryMapping|raw }}');
-            window.EnderecoIntegrator.countryMappingReverse = JSON.parse('{{ enderecoclient.oCountryMappingReverse|raw }}');
+            window.EnderecoIntegrator.countryCodeToNameMapping = JSON.parse('{{ enderecoclient.sCountries|escape('js') }}');
+            window.EnderecoIntegrator.countryMapping = JSON.parse('{{ enderecoclient.oCountryMapping|escape('js') }}');
+            window.EnderecoIntegrator.countryMappingReverse = JSON.parse('{{ enderecoclient.oCountryMappingReverse|escape('js') }}');
 
-            window.EnderecoIntegrator.subdivisionCodeToNameMapping = JSON.parse('{{ enderecoclient.oSubdivisions|raw }}');
-            window.EnderecoIntegrator.subdivisionMapping = JSON.parse('{{ enderecoclient.oSubdivisionMapping|raw }}');
-            window.EnderecoIntegrator.subdivisionMappingReverse = JSON.parse('{{ enderecoclient.oSubdivisionMappingReverse|raw }}');
+            window.EnderecoIntegrator.subdivisionCodeToNameMapping = JSON.parse('{{ enderecoclient.oSubdivisions|escape('js') }}');
+            window.EnderecoIntegrator.subdivisionMapping = JSON.parse('{{ enderecoclient.oSubdivisionMapping|escape('js') }}');
+            window.EnderecoIntegrator.subdivisionMappingReverse = JSON.parse('{{ enderecoclient.oSubdivisionMappingReverse|escape('js') }}');
 
             window.EnderecoIntegrator.checkAllCallback = function(EAO) {
                 if ('billing_address' === EAO.addressType) {
