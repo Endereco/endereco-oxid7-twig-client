@@ -95,7 +95,6 @@ $aModule = [
         ['group' => 'AMS', 'name' => 'sCHECKPAYPAL', 'type' => 'bool', 'value' => false],
         ['group' => 'AMS', 'name' => 'sAMSBLURTRIGGER', 'type' => 'bool', 'value' => 'true'],
         ['group' => 'AMS', 'name' => 'sAMSResumeSubmit', 'type' => 'bool', 'value' => 'true'],
-        ['group' => 'AMS', 'name' => 'sSMARTFILL', 'type' => 'bool', 'value' => 'true'],
         ['group' => 'AMS', 'name' => 'bChangeFieldsOrder', 'type' => 'bool', 'value' => 'true'],
         ['group' => 'AMS', 'name' => 'bAllowCloseModal', 'type' => 'bool', 'value' => 'true'],
         ['group' => 'AMS', 'name' => 'bConfirmWithCheckbox', 'type' => 'bool', 'value' => 'false'],
