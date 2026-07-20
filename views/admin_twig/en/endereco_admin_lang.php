@@ -42,7 +42,6 @@ $aLang = [
     'SHOP_MODULE_sAMSBLURTRIGGER' => 'Trigger AddressCheck immediately after entering or changing the address',
     'SHOP_MODULE_sAMSSubmitTrigger' => 'Check address on submit',
     'SHOP_MODULE_sAMSResumeSubmit' => 'Continue submit after the address has been selected',
-    'SHOP_MODULE_sSMARTFILL' => 'Fill fields when input is obvious (SmartFill)',
     'SHOP_MODULE_bChangeFieldsOrder' => 'Optimize address fields order',
 
     'SHOP_MODULE_bAllowCloseModal' => 'Allow customer to close address selection modal',

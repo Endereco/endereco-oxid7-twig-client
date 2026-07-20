@@ -45,7 +45,6 @@ $aLang = [
     'SHOP_MODULE_sAMSSubmitTrigger' => 'Adressprüfung beim Absenden des Formulars auslösen',
     'SHOP_MODULE_sAMSResumeSubmit' => 'Das Absenden des Formulars nach der Adressauswahl fortsetzen',
     'HELP_SHOP_MODULE_sAMSBLURTRIGGER' => 'Ist die Funktion aktiv, wird die Adressprüfung sofort nach Eingabe der Adresse angestoßen. Ist die deaktiviert, erfolg die Prüfung beim Klick auf den "Weiter" Button.',
-    'SHOP_MODULE_sSMARTFILL' => 'Felder bei nur einem verbleibenden Adressvorschlag automatisch ausfüllen (SmartAutocomplete) <i>beta</i>',
     'SHOP_MODULE_bChangeFieldsOrder' => 'Felderreihenfolge optimieren',
 
     'SHOP_MODULE_bAllowCloseModal' => 'Das Schließen des Modals erlauben',
