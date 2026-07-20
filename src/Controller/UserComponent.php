@@ -4,6 +4,7 @@ namespace Endereco\Oxid7Client\Controller;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
+use OxidEsales\Eshop\Application\Model\Address;
 use OxidEsales\Eshop\Core\Registry;
 use OxidEsales\EshopCommunity\Core\Di\ContainerFacade;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Bridge\ShopConfigurationDaoBridgeInterface;
@@ -197,31 +198,7 @@ class UserComponent extends UserComponent_parent
             $oUser->save();
         }
 
-        $aDelAddress = $this->getDelAddressData();
-        $sAddressId = Registry::get(\OxidEsales\Eshop\Core\Request::class)->getRequestEscapedParameter('oxaddressid');
-        $shippingAmsWasInitiated = isset($_POST['shipping_ams_session_counter']);
-        $shippingAmsWasUsed = intval($_POST['shipping_ams_session_counter']) > 0;
-        if ($aDelAddress && $sAddressId && $shippingAmsWasInitiated && $shippingAmsWasUsed) {
-            $hasSubdivisions = (new EnderecoService())->countryHasSubdivisions(
-                $aDelAddress['oxaddress__oxcountryid']
-            );
-            $hash = $this->calculateHash(
-                $aDelAddress['oxaddress__oxcountryid'],
-                $hasSubdivisions ? ($aDelAddress['oxaddress__oxstateid'] ?? '') : null,
-                $aDelAddress['oxaddress__oxzip'],
-                $aDelAddress['oxaddress__oxcity'],
-                $aDelAddress['oxaddress__oxstreet'],
-                $aDelAddress['oxaddress__oxstreetnr'],
-                $aDelAddress['oxaddress__oxaddinfo']
-            );
-
-            $oAddress = oxNew(\OxidEsales\Eshop\Application\Model\Address::class);
-            $oAddress->setId($sAddressId);
-            $oAddress->load($sAddressId);
-
-            $oAddress->oxaddress__mojoaddresshash->rawValue = $hash;
-            $oAddress->save();
-        }
+        $this->writeShippingAddressHash();
 
         return $return;
     }
@@ -252,32 +229,7 @@ class UserComponent extends UserComponent_parent
             $oUser->save();
         }
 
-        $aDelAddress = $this->getDelAddressData();
-        $sAddressId = Registry::get(\OxidEsales\Eshop\Core\Request::class)->getRequestEscapedParameter('oxaddressid');
-        $shippingAmsWasInitiated = isset($_POST['shipping_ams_session_counter']);
-        $shippingAmsWasUsed = intval($_POST['shipping_ams_session_counter']) > 0;
-        if ($aDelAddress && $sAddressId && $shippingAmsWasInitiated && $shippingAmsWasUsed) {
-            $hasSubdivisions = (new EnderecoService())->countryHasSubdivisions(
-                $aDelAddress['oxaddress__oxcountryid']
-            );
-
-            $hash = $this->calculateHash(
-                $aDelAddress['oxaddress__oxcountryid'],
-                $hasSubdivisions ? ($aDelAddress['oxaddress__oxstateid'] ?? '') : null,
-                $aDelAddress['oxaddress__oxzip'],
-                $aDelAddress['oxaddress__oxcity'],
-                $aDelAddress['oxaddress__oxstreet'],
-                $aDelAddress['oxaddress__oxstreetnr'],
-                $aDelAddress['oxaddress__oxaddinfo']
-            );
-
-            $oAddress = oxNew(\OxidEsales\Eshop\Application\Model\Address::class);
-            $oAddress->setId($sAddressId);
-            $oAddress->load($sAddressId);
-
-            $oAddress->oxaddress__mojoaddresshash->rawValue = $hash;
-            $oAddress->save();
-        }
+        $this->writeShippingAddressHash();
 
         return $return;
     }
@@ -309,7 +261,49 @@ class UserComponent extends UserComponent_parent
             $oUser->save();
         }
 
+        $this->writeShippingAddressHash();
+
         return $return;
+    }
+
+    /**
+     * Writes shipping address hash to the database, using session
+     * `deladrid` instead of the request's `oxaddressid`, which is
+     * still empty on first-time address creation.
+     */
+    private function writeShippingAddressHash()
+    {
+        $shippingAmsWasInitiated = isset($_POST['shipping_ams_session_counter']);
+        $shippingAmsWasUsed = intval($_POST['shipping_ams_session_counter'] ?? 0) > 0;
+        if (!$shippingAmsWasInitiated || !$shippingAmsWasUsed) {
+            return;
+        }
+
+        $sAddressId = Registry::getSession()->getVariable('deladrid');
+        if (!$sAddressId) {
+            return;
+        }
+
+        $oAddress = oxNew(Address::class);
+        if (!$oAddress->load($sAddressId)) {
+            return;
+        }
+
+        $hasSubdivisions = (new EnderecoService())->countryHasSubdivisions(
+            $oAddress->oxaddress__oxcountryid->rawValue
+        );
+        $hash = $this->calculateHash(
+            $oAddress->oxaddress__oxcountryid->rawValue,
+            $hasSubdivisions ? ($oAddress->oxaddress__oxstateid->rawValue ?? '') : null,
+            $oAddress->oxaddress__oxzip->rawValue,
+            $oAddress->oxaddress__oxcity->rawValue,
+            $oAddress->oxaddress__oxstreet->rawValue,
+            $oAddress->oxaddress__oxstreetnr->rawValue,
+            $oAddress->oxaddress__oxaddinfo->rawValue
+        );
+
+        $oAddress->oxaddress__mojoaddresshash->rawValue = $hash;
+        $oAddress->save();
     }
 
     /**
