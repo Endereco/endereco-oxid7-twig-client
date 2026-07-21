@@ -338,6 +338,18 @@ const checkSelectValuesAgainstMapping = (domElementOfSelect, mappingObject) => {
     return result;
 };
 
+// APEX theme's "pencil" edit-address toggle is type="submit" inside #user_form even though it
+// only shows/hides the address form, so the SDK's own discovery wires it up too. Undo that.
+EnderecoIntegrator.customSubmitButtonHandlers.push(function (form, submitHandler) {
+    if (!form || form.id !== 'user_form') {
+        return;
+    }
+    const changeAddressBtn = document.querySelector('#userChangeAddress');
+    if (changeAddressBtn && changeAddressBtn.type === 'submit') {
+        changeAddressBtn.removeEventListener('click', submitHandler);
+    }
+});
+
 /**
  * This function is needed to simulate blur, change and other events for better compatibility with frontend validation
  * frameworks and some themes that expect those events. Without it endereco js-sdk would set some field without
