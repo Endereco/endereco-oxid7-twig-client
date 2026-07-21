@@ -9,7 +9,7 @@
     >
 <input type="hidden" name="deladr[oxaddress__mojoamsts]" value="{% if isset( deladr.oxaddress__mojoamsts ) %}{{ deladr.oxaddress__mojoamsts }}{% else %}{{ delivadr.oxaddress__mojoamsts.value }}{% endif %}">
 <input type="hidden" name="deladr[oxaddress__mojoamsstatus]" value="{% if isset( deladr.oxaddress__mojoamsstatus ) %}{{ deladr.oxaddress__mojoamsstatus }}{% else %}{{ delivadr.oxaddress__mojoamsstatus.value }}{% endif %}">
-<input type="hidden" name="deladr[oxaddress__mojoamspredictions]" value="{% if isset( deladr.oxaddress__mojoamspredictions ) %}{{ deladr.oxaddress__mojoamspredictions }}{% else %}{{ delivadr.oxaddress__mojoamspredictions.value }}{% endif %}">
+<input type="hidden" name="deladr[oxaddress__mojoamspredictions]" value="{% if isset( deladr.oxaddress__mojoamspredictions ) %}{{ deladr.oxaddress__mojoamspredictions|raw }}{% else %}{{ delivadr.oxaddress__mojoamspredictions.value }}{% endif %}">
 
 <input type="hidden" name="deladr[oxaddress__mojonamescore]" value="{% if isset( deladr.oxaddress__mojonamescore ) %}{{ deladr.oxaddress__mojonamescore }}{% else %}{{ delivadr.oxaddress__mojonamescore.value }}{% endif %}">
 
