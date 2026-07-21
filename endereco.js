@@ -338,6 +338,29 @@ const checkSelectValuesAgainstMapping = (domElementOfSelect, mappingObject) => {
     return result;
 };
 
+// In the APEX theme the checkout address step's "Next" button lives outside #user_form with no
+// form="…" attribute, so findFormReference()in the JS-SDK can't resolve it.
+EnderecoIntegrator.customFormReferenceResolvers.push(function (e, _triggerType) {
+    if (e.target && e.target.closest && e.target.closest('#userFormSubmit')) {
+        return document.querySelector('#user_form');
+    }
+    return null;
+});
+
+// The missing form="…" attribute (see above) means attachSubmitListenersToForm() never wires up
+// this button either. It also ships as type="button": resume only re-dispatches the click for type="submit".
+EnderecoIntegrator.customSubmitButtonHandlers.push(function (form, submitHandler) {
+    if (!form || form.id !== 'user_form') {
+        return;
+    }
+    const btn = document.querySelector('#userFormSubmit');
+    if (!btn) {
+        return;
+    }
+    btn.setAttribute('type', 'submit');
+    btn.addEventListener('click', submitHandler, true);
+});
+
 /**
  * This function is needed to simulate blur, change and other events for better compatibility with frontend validation
  * frameworks and some themes that expect those events. Without it endereco js-sdk would set some field without
