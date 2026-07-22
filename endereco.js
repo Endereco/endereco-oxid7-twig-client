@@ -182,7 +182,7 @@ EnderecoIntegrator.resolvers.salutationWrite = function (value, _subscriber) {
         'm': 'MR'
     };
     return new Promise(function (resolve, _reject) {
-        resolve(mapping[value]);
+        resolve(mapping[value] !== undefined ? mapping[value] : '');
     });
 };
 EnderecoIntegrator.resolvers.salutationRead = function (value, _subscriber) {
@@ -191,7 +191,7 @@ EnderecoIntegrator.resolvers.salutationRead = function (value, _subscriber) {
         'MR': 'm'
     };
     return new Promise(function (resolve, _reject) {
-        resolve(mapping[value]);
+        resolve(mapping[value] !== undefined ? mapping[value] : '');
     });
 };
 
