@@ -68,90 +68,34 @@
         >
         </form>
         <script>
-            (function() {
-                function afterCreateHandler(EAO) {
-                    if (!EAO) {
-                        return;
-                    }
-
-                    const handleAddressConfirmation = function(EAO) {
-                        EAO.waitForAllPopupsToClose().then(function() {
-                            EAO.waitUntilReady().then(function() {
-                                if (window.EnderecoIntegrator && window.EnderecoIntegrator.globalSpace.reloadPage) {
-                                    window.EnderecoIntegrator.globalSpace.reloadPage();
-                                    window.EnderecoIntegrator.globalSpace.reloadPage = undefined;
-                                }
-                            }).catch();
-                        }).catch();
-
-                        EAO._awaits++;
-                        EAO.util.axios({
-                            method: 'post',
-                            url: '{{ sitepath }}?cl=enderecosaveaddress&stoken={{ oViewConf.getSessionChallengeToken() }}',
-                            data: {
-                                method: 'editBillingAddress',
-                                params: {
-                                    addressId: '{{ oxcmp_user.oxuser__oxid.value }}',
-                                    address: EAO.address,
-                                    enderecometa: {
-                                        ts: EAO.addressTimestamp,
-                                        status: EAO.addressStatus,
-                                        predictions: EAO.addressPredictions,
-                                    }
-                                }
-                            }
-                        }).then(function(response) {
-                            window.EnderecoIntegrator.globalSpace.reloadPage = function() {
-                                if(window.EnderecoIntegrator.popupQueue <= 0 && response.data == 2){
-                                    location.reload();
-                                }
-                            }
-                        }).catch(function(error) {
-                            console.log('Something went wrong.');
-                        }).finally(function() {
-                            EAO._awaits--;
-                        });
-                    };
-
-                    EAO.waitForAllExtension().then(function() {
-                        EAO.onEditAddress.push(function() {
-                            sessionStorage.setItem('enderecoReopenAddressType', 'billing_address');
-                            document.querySelectorAll('#orderAddress form')[0].submit();
-                        });
-
-                        EAO.onAfterAddressPersisted.push((e, result) => {
-                            if (result.processStatus === 'finished') {
-                                return handleAddressConfirmation(e)
-                            }
-
-                            return Promise.resolve();
-                        })
-                    }).catch();
-                }
-
-                enderecoInitAMS(
-                    {
-                        countryCode: '#endereco-billing-country-code',
-                        postalCode: '#endereco-billing-postal-code',
-                        locality: '#endereco-billing-locality',
-                        streetName: '#endereco-billing-street-name',
-                        buildingNumber: '#endereco-billing-building-number',
-                        additionalInfo: '#endereco-billing-additional-info',
-                        {% if oView.countryHasSubdivisions(oxcmp_user.oxuser__oxcountryid.value) %}
-                        subdivisionCode: '#endereco-billing-subdivision-code',
-                        {% endif %}
-                        addressStatus: '#endereco-billing-status',
-                        addressTimestamp: '#endereco-billing-timestamp',
-                        addressPredictions: '#endereco-billing-predictions'
-                    },
-                    {
-                        name: 'billing_ams',
+            enderecoInitAMS(
+                {
+                    countryCode: '#endereco-billing-country-code',
+                    postalCode: '#endereco-billing-postal-code',
+                    locality: '#endereco-billing-locality',
+                    streetName: '#endereco-billing-street-name',
+                    buildingNumber: '#endereco-billing-building-number',
+                    additionalInfo: '#endereco-billing-additional-info',
+                    {% if oView.countryHasSubdivisions(oxcmp_user.oxuser__oxcountryid.value) %}
+                    subdivisionCode: '#endereco-billing-subdivision-code',
+                    {% endif %}
+                    addressStatus: '#endereco-billing-status',
+                    addressTimestamp: '#endereco-billing-timestamp',
+                    addressPredictions: '#endereco-billing-predictions'
+                },
+                {
+                    name: 'billing_ams',
+                    addressType: 'billing_address',
+                    intent: 'review',
+                    beforeActivation: (EAO) => window.EnderecoIntegrator.createOrderAddressConfirmationHandler({
+                        saveUrl: '{{ sitepath }}?cl=enderecosaveaddress&stoken={{ oViewConf.getSessionChallengeToken() }}',
                         addressType: 'billing_address',
-                        intent: 'review'
-                    },
-                    afterCreateHandler
-                );
-            })();
+                        addressId: '{{ oxcmp_user.oxuser__oxid.value }}',
+                        editFormIndex: 0,
+                        sessionStorageKey: 'billing_address'
+                    })(EAO)
+                }
+            );
         </script>
     </div>
     {% endif %}
@@ -220,91 +164,36 @@
             >
             </form>
             <script>
-                (function() {
-                    function afterCreateHandler(EAO) {
-                        if (!EAO) {
-                            return;
-                        }
-
-                        const handleAddressConfirmation = function(EAO) {
-                            EAO.waitForAllPopupsToClose().then(function() {
-                                EAO.waitUntilReady().then(function() {
-                                    if (window.EnderecoIntegrator && window.EnderecoIntegrator.globalSpace.reloadPage) {
-                                        window.EnderecoIntegrator.globalSpace.reloadPage();
-                                        window.EnderecoIntegrator.globalSpace.reloadPage = undefined;
-                                    }
-                                }).catch();
-                            }).catch();
-
-                            EAO._awaits++;
-                            EAO.util.axios({
-                                method: 'post',
-                                url: '{{ sitepath }}?cl=enderecosaveaddress&stoken={{ oViewConf.getSessionChallengeToken() }}',
-                                data: {
-                                    method: 'editShippingAddress',
-                                    params: {
-                                        addressId: '{{ oDelAdress.oxaddress__oxid.value }}',
-                                        address: EAO.address,
-                                        enderecometa: {
-                                            ts: EAO.addressTimestamp,
-                                            status: EAO.addressStatus,
-                                            predictions: EAO.addressPredictions,
-                                        }
-                                    }
-                                }
-                            }).then(function(response) {
-                                window.EnderecoIntegrator.globalSpace.reloadPage = function() {
-                                    if(response.data == 2){
-                                        location.reload();
-                                    }
-                                }
-                            }).catch(function(error) {
-                                console.log('Something went wrong.');
-                            }).finally(function() {
-                                EAO._awaits--;
-                            });
-                        };
-
-                        EAO.waitForAllExtension().then(function() {
-                            EAO.onEditAddress.push(function() {
-                                sessionStorage.setItem('enderecoReopenAddressType', 'shipping_address');
-                                document.querySelectorAll('#orderAddress form')[1].submit();
-                            });
-
-                            EAO.onAfterAddressPersisted.push((e, result) => {
-                                if (result.processStatus === 'finished') {
-                                    return handleAddressConfirmation(e)
-                                }
-
-                                return Promise.resolve();
-                            })
-                        }).catch();
-                    }
-
-                    enderecoInitAMS(
-                        {
-                            countryCode: '#endereco-shipping-country-code',
-                            postalCode: '#endereco-shipping-postal-code',
-                            locality: '#endereco-shipping-locality',
-                            streetName: '#endereco-shipping-street-name',
-                            buildingNumber: '#endereco-shipping-building-number',
-                            {% if oView.countryHasSubdivisions(oDelAdress.oxaddress__oxcountryid.value) %}
-                            subdivisionCode: '#endereco-shipping-subdivision-code',
-                            {% endif %}
-                            addressStatus: '#endereco-shipping-status',
-                            addressTimestamp: '#endereco-shipping-timestamp',
-                            addressPredictions: '#endereco-shipping-predictions',
-                            additionalInfo: '#endereco-shipping-additional-info',
-                        },
-                        {
-                            name: 'shipping_ams',
+                enderecoInitAMS(
+                    {
+                        countryCode: '#endereco-shipping-country-code',
+                        postalCode: '#endereco-shipping-postal-code',
+                        locality: '#endereco-shipping-locality',
+                        streetName: '#endereco-shipping-street-name',
+                        buildingNumber: '#endereco-shipping-building-number',
+                        {% if oView.countryHasSubdivisions(oDelAdress.oxaddress__oxcountryid.value) %}
+                        subdivisionCode: '#endereco-shipping-subdivision-code',
+                        {% endif %}
+                        addressStatus: '#endereco-shipping-status',
+                        addressTimestamp: '#endereco-shipping-timestamp',
+                        addressPredictions: '#endereco-shipping-predictions',
+                        additionalInfo: '#endereco-shipping-additional-info',
+                    },
+                    {
+                        name: 'shipping_ams',
+                        addressType: 'shipping_address',
+                        intent: 'review',
+                        beforeActivation: (EAO) => window.EnderecoIntegrator.createOrderAddressConfirmationHandler({
+                            saveUrl: '{{ sitepath }}?cl=enderecosaveaddress&stoken={{ oViewConf.getSessionChallengeToken() }}',
                             addressType: 'shipping_address',
-                            intent: 'review'
-                        },
-                        afterCreateHandler,
-                        true
-                    );
-                })();
+                            addressId: '{{ oDelAdress.oxaddress__oxid.value }}',
+                            editFormIndex: 1,
+                            sessionStorageKey: 'shipping_address'
+                        })(EAO)
+                    },
+                    null,
+                    true
+                );
             </script>
         </div>
         {% endif %}
