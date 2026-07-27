@@ -475,6 +475,86 @@ window.EnderecoIntegrator.afterAMSActivation.push(function (EAO) {
     });
 });
 
+// Guards against reloading more than once.
+window.EnderecoIntegrator.orderAddressReloadTriggered = false;
+// Set once an order-confirmation-page address save succeeds.
+window.EnderecoIntegrator.orderAddressReloadNeeded = false;
+
+/**
+ * Builds the beforeActivation handler for a single address on the order confirmation page.
+ * Registering onEditAddress/onAfterAddressPersisted here guarantees they're in place before
+ * the automatic address check could possibly complete and call them.
+ *
+ * @param {Object} options
+ * @param {string} options.saveUrl
+ * @param {'billing_address'|'shipping_address'} options.addressType
+ * @param {string} options.addressId
+ * @param {number} options.editFormIndex - index into '#orderAddress form' for this address
+ * @param {string} options.sessionStorageKey
+ */
+window.EnderecoIntegrator.createOrderAddressConfirmationHandler = (options) => {
+    const { saveUrl, addressType, addressId, editFormIndex, sessionStorageKey } = options;
+
+    return function beforeActivation(EAO) {
+        const handleAddressConfirmation = async function () {
+            try {
+                await EAO.util.axios({
+                    method: 'post',
+                    url: saveUrl,
+                    data: {
+                        method: addressType === 'billing_address' ? 'editBillingAddress' : 'editShippingAddress',
+                        params: {
+                            addressId,
+                            address: EAO.address,
+                            enderecometa: {
+                                ts: EAO.addressTimestamp,
+                                status: EAO.addressStatus,
+                                predictions: EAO.addressPredictions
+                            }
+                        }
+                    }
+                });
+                // Only success/failure of the save call matters, not its response payload.
+                window.EnderecoIntegrator.orderAddressReloadNeeded = true;
+                maybeReloadOrderPage();
+            } catch { /* ignore */ }
+        };
+
+        EAO.onEditAddress.push(async function () {
+            sessionStorage.setItem('enderecoReopenAddressType', sessionStorageKey);
+            document.querySelectorAll('#orderAddress form')[editFormIndex].submit();
+        });
+
+        EAO.onAfterAddressPersisted.push(async (e, result) => {
+            if (result.processStatus === 'finished') {
+                return handleAddressConfirmation();
+            }
+
+            maybeReloadOrderPage();
+        });
+    };
+};
+
+// Re-checked from every order-confirmation-page onAfterAddressPersisted, confirmed or not, so
+// a dismissed modal still triggers a reload another address already earmarked.
+const maybeReloadOrderPage = () => {
+    if (window.EnderecoIntegrator.orderAddressReloadTriggered) {
+        return;
+    }
+
+    // The edit redirect sets this synchronously before its own form submit - don't race it.
+    if (sessionStorage.getItem('enderecoReopenAddressType')) {
+        return;
+    }
+
+    const isLastInQueue = window.EnderecoIntegrator.processQueue.size === 1;
+
+    if (isLastInQueue && window.EnderecoIntegrator.orderAddressReloadNeeded) {
+        window.EnderecoIntegrator.orderAddressReloadTriggered = true;
+        location.reload();
+    }
+};
+
 const waitForConfig = setInterval(function () {
     if (typeof enderecoLoadAMSConfig === 'function') {
         try {
