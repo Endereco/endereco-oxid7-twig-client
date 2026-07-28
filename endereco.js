@@ -448,6 +448,33 @@ window.EnderecoIntegrator.isAddressFormStillValid = (EAO) => {
     return true;
 };
 
+// "Add new delivery address" reuses the existing shippingAddressForm fields without ever
+// blurring them, so EPO.firstName/lastName stay cached at the old address's name. Reset the
+// backing fields directly (not the public setters, which write async and would race this).
+window.EnderecoIntegrator.afterAMSActivation.push(function (EAO) {
+    if ('shipping_address' !== EAO.addressType) {
+        return;
+    }
+
+    const addDeliveryAddressRadio = document.querySelector('.dd-add-delivery-address input[name="oxaddressid"]');
+    if (!addDeliveryAddressRadio || addDeliveryAddressRadio._enderecoAddDeliveryChangeAttached) {
+        return;
+    }
+    addDeliveryAddressRadio._enderecoAddDeliveryChangeAttached = true;
+
+    addDeliveryAddressRadio.addEventListener('change', function () {
+        const shippingPersonEPO = window.EnderecoIntegrator.integratedObjects['shipping_personservices'];
+        if (!shippingPersonEPO) {
+            return;
+        }
+        shippingPersonEPO._salutation = '';
+        shippingPersonEPO._firstName = '';
+        shippingPersonEPO._lastName = '';
+        shippingPersonEPO._nameScore = '';
+        shippingPersonEPO._changed = false;
+    });
+});
+
 const waitForConfig = setInterval(function () {
     if (typeof enderecoLoadAMSConfig === 'function') {
         try {
