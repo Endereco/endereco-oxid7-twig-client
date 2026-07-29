@@ -9,7 +9,7 @@
   "author": "ilja_weber <ilja@endereco.de>",
   "license": "ISC",
   "dependencies": {
-    "@endereco/js-sdk": "~1.14",
+    "@endereco/js-sdk": "1.14.4",
     "babel-loader": "^10.0.0",
     "html-loader": "^5.1.0",
     "polyfill-array-includes": "^2.0.0",
