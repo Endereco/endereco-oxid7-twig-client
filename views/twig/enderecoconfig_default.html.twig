@@ -1,5 +1,3 @@
-{% set sitepath = oViewConf.getBaseDir() %}
-
 {% if not enderecoclient.bAllowControllerFilter or enderecoclient.sControllerClass in enderecoclient.aAllowedControllerClasses or ('order' == enderecoclient.sControllerClass and enderecoclient.sCHECKALL)  %}
 
     {% set popUpHeadline = "ENDERECOOXID7CLIENT_POPUP_HEADLINE"|translate %}
