@@ -9,54 +9,6 @@ $aModule = [
     'author'        => 'Endereco UG (Haftungsbeschränkt) - Gesellschaft für Master Data Quality Management',
     'email'         => 'info@endereco.de',
     'url'           => 'https://www.endereco.de',
-    'blocks' => [
-        [
-            'template' => 'layout/base.tpl',
-            'block' => 'base_js',
-            'file' => 'views/smarty/agent-include.tpl',
-        ],
-        [
-            'template' => 'form/fieldset/user_billing.tpl',
-            'block' => 'form_user_billing_country',
-            'file' => 'views/smarty/hidden_fields/endereco_form_user_billing_country.tpl',
-        ],
-        [
-            'template' => 'form/fieldset/user_shipping.tpl',
-            'block' => 'form_user_shipping_country',
-            'file' => 'views/smarty/hidden_fields/endereco_form_user_shipping_country.tpl',
-        ],
-        [
-            'template' => 'form/fieldset/user_noaccount.tpl',
-            'block' => 'user_noaccount_email',
-            'file' => 'views/smarty/hidden_fields/endereco_form_user_noaccount.tpl',
-        ],
-        [
-            'template' => 'form/fieldset/user_account.tpl',
-            'block' => 'user_account_username',
-            'file' => 'views/smarty/hidden_fields/endereco_form_user_account.tpl',
-        ],
-        [
-            'template' => 'page/checkout/order.tpl',
-            'block' => 'checkout_order_address',
-            'file' => 'views/smarty/hidden_fields/endereco_checkout_checkout_order_address.tpl',
-        ],
-        [
-            'template' => 'layout/base.tpl',
-            'block' => 'head_meta_robots',
-            'file' => 'views/smarty/globalfilters.tpl',
-        ],
-        [
-            'template' => 'user_main.tpl',
-            'block' => 'admin_user_main_assign_groups',
-            'file' => 'views/admin_smarty/blocks/user_main.tpl',
-        ],
-        [
-            'template' => 'user_address.tpl',
-            'block' => 'admin_user_address_form',
-            'file' => 'views/admin_smarty/blocks/user_address.tpl',
-        ]
-
-    ],
     'controllers'  => [
         'enderecoconfig' => \Endereco\Oxid7Client\Widget\IncludeConfigWidget::class,
         'enderecocolor' => \Endereco\Oxid7Client\Widget\IncludeColorWidget::class,
@@ -72,15 +24,6 @@ $aModule = [
         \OxidEsales\Eshop\Application\Model\Order::class => \Endereco\Oxid7Client\Model\Order::class,
         \OxidEsales\Eshop\Application\Controller\Admin\UserMain::class => \Endereco\Oxid7Client\Controller\Admin\UserMain::class,
         \OxidEsales\Eshop\Application\Controller\Admin\UserAddress::class => \Endereco\Oxid7Client\Controller\Admin\UserAddress::class,
-    ],
-    'templates' => [
-        'enderecocolor.tpl' => '/views/smarty/enderecocolor.tpl',
-        'enderecoconfig_default.tpl' => '/views/smarty/configs/enderecoconfig_default.tpl',
-        'enderecoconfig_flow.tpl' => '/views/smarty/configs/enderecoconfig_flow.tpl',
-        'enderecoconfig_wave.tpl' => '/views/smarty/configs/enderecoconfig_wave.tpl',
-        'enderecoconfig_azure.tpl' => '/views/smarty/configs/enderecoconfig_azure.tpl',
-        'endereco_settings.tpl' => '/views/admin_smarty/tpl/endereco_settings.tpl',
-        'addresscheck.tpl' => '/views/admin_smarty/tpl/addresscheck.tpl',
     ],
     'events'       => [
 
