@@ -18,19 +18,6 @@ if (!window.Promise) {
 }
 
 EnderecoIntegrator.postfix = {
-    ams: {
-        countryCode: 'oxcountryid]',
-        postalCode: 'oxzip]',
-        subdivisionCode: 'oxstateid]',
-        locality: 'oxcity]',
-        streetFull: '',
-        streetName: 'oxstreet]',
-        buildingNumber: 'oxstreetnr]',
-        addressStatus: 'mojoamsstatus]',
-        addressTimestamp: 'mojoamsts]',
-        addressPredictions: 'mojoamspredictions]',
-        additionalInfo: 'oxaddinfo]',
-    },
     personServices: {
         salutation: 'oxsal]',
         firstName: 'oxfname]',
