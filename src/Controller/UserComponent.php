@@ -2,12 +2,8 @@
 
 namespace Endereco\Oxid7Client\Controller;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Request;
 use OxidEsales\Eshop\Application\Model\Address;
 use OxidEsales\Eshop\Core\Registry;
-use OxidEsales\EshopCommunity\Core\Di\ContainerFacade;
-use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Bridge\ShopConfigurationDaoBridgeInterface;
 use Endereco\Oxid7Client\Component\EnderecoService;
 
 class UserComponent extends UserComponent_parent
@@ -87,92 +83,11 @@ class UserComponent extends UserComponent_parent
         return $return;
     }
 
-    /**
-     * This functions inspects POST and tries to find open sessions in it.
-     * In case something is found, doaccountings are sent.
-     *
-     * This should happen before any validation
-     * @see https://github.com/Endereco/endereco-oxid7-client/issues/9
-     */
-    private function findAndCloseEnderecoSessions()
-    {
-
-        $shopConfiguration = ContainerFacade::get(ShopConfigurationDaoBridgeInterface::class)->get();
-
-        $aModuleConfiguration = $shopConfiguration->getModuleConfiguration('endereco-oxid7-client');
-
-        $sApiKy = $aModuleConfiguration->getModuleSetting('sAPIKEY')->getValue();
-        $sEndpoint = $aModuleConfiguration->getModuleSetting('sSERVICEURL')->getValue();
-
-        $moduleVersion = $aModuleConfiguration->getVersion();
-
-        $sAgentInfo = "Endereco Oxid7 Client v" . $moduleVersion;
-
-        $bAnyDoAccounting = false;
-
-        if ($_POST) {
-            foreach ($_POST as $sVarName => $sVarValue) {
-                if ((strpos($sVarName, '_session_counter') !== false) && 0 < intval($sVarValue)) {
-                    $sSessionIdName = str_replace('_session_counter', '', $sVarName) . '_session_id';
-                    $sSessionId = $_POST[$sSessionIdName];
-                    try {
-                        $message = [
-                            'jsonrpc' => '2.0',
-                            'id' => 1,
-                            'method' => 'doAccounting',
-                            'params' => [
-                                'sessionId' => $sSessionId
-                            ]
-                        ];
-                        $client = new Client(['timeout' => 5.0]);
-
-                        $newHeaders = [
-                            'Content-Type' => 'application/json',
-                            'X-Auth-Key' => $sApiKy,
-                            'X-Transaction-Id' => $sSessionId,
-                            'X-Transaction-Referer' => EnderecoService::getTransactionReferer(),
-                            'X-Agent' => $sAgentInfo,
-                        ];
-                        $request = new Request('POST', $sEndpoint, $newHeaders, json_encode($message));
-                        $client->send($request);
-                        $bAnyDoAccounting = true;
-                    } catch (\Exception $e) {
-                        // Do nothing.
-                    }
-                }
-            }
-        }
-
-        if ($bAnyDoAccounting) {
-            try {
-                $message = [
-                    'jsonrpc' => '2.0',
-                    'id' => 1,
-                    'method' => 'doConversion',
-                    'params' => []
-                ];
-                $client = new Client(['timeout' => 5.0]);
-                $newHeaders = [
-                    'Content-Type' => 'application/json',
-                    'X-Auth-Key' => $sApiKy,
-                    'X-Transaction-Id' => 'not_required',
-                    'X-Transaction-Referer' => EnderecoService::getTransactionReferer(),
-                    'X-Agent' => $sAgentInfo,
-                ];
-                $request = new Request('POST', $sEndpoint, $newHeaders, json_encode($message));
-                $client->send($request);
-            } catch (\Exception $e) {
-                // Do nothing.
-                echo $e->getMessage();
-            }
-        }
-    }
-
     // phpcs:disable
     public function changeuser_testvalues()
     {
         // phpcs:enable
-        $this->findAndCloseEnderecoSessions();
+        (new EnderecoService())->findAndCloseEnderecoSessions();
 
         $return = parent::changeuser_testvalues();
 
@@ -205,7 +120,7 @@ class UserComponent extends UserComponent_parent
 
     public function changeUser()
     {
-        $this->findAndCloseEnderecoSessions();
+        (new EnderecoService())->findAndCloseEnderecoSessions();
         $return = parent::changeUser();
 
         // Hash signature. We assume this logic is executed only from the frontend.
@@ -236,7 +151,7 @@ class UserComponent extends UserComponent_parent
 
     public function createUser()
     {
-        $this->findAndCloseEnderecoSessions();
+        (new EnderecoService())->findAndCloseEnderecoSessions();
 
         $return = parent::createUser();
 
