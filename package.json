@@ -10,7 +10,7 @@
   "author": "Ilja Weber <ilja@endereco.de>",
   "license": "GPL-3.0-only",
   "dependencies": {
-    "@endereco/js-sdk": "1.14.3",
+    "@endereco/js-sdk": "1.14.4",
     "lodash.merge": "^4.6.2",
     "polyfill-array-includes": "^2.0.0",
     "promise-polyfill": "^8.3.0"
