@@ -10,7 +10,7 @@ class UserMain extends UserMain_parent
         'locality',
         'streetName',
         'buildingNumber',
-        'subdevisionCode',
+        'subdivisionCode',
         'additionalInfo'
     ];
 
@@ -57,7 +57,7 @@ class UserMain extends UserMain_parent
         $predictionHTML = "";
         foreach ($this->predictions as $predictionKey) {
             $predictionHTML .= "<div class='prediction'>"
-                . $predictionKey . ": " . $prediction->$predictionKey . "</div>";
+                . $predictionKey . ": " . ($prediction->$predictionKey ?? "") . "</div>";
         }
 
         return $predictionHTML;

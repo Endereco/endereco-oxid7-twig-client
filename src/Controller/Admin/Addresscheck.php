@@ -16,7 +16,7 @@ class Addresscheck extends AdminController
         'locality',
         'streetName',
         'buildingNumber',
-        'subdevisionCode',
+        'subdivisionCode',
         'additionalInfo'
     ];
 
@@ -56,7 +56,7 @@ class Addresscheck extends AdminController
         $predictionHTML = "";
         foreach ($this->predictions as $predictionKey) {
             $predictionHTML .= "<div class='prediction'>"
-                . $predictionKey . ": " . $prediction->$predictionKey . "</div>";
+                . $predictionKey . ": " . ($prediction->$predictionKey ?? "") . "</div>";
         }
 
         return $predictionHTML;

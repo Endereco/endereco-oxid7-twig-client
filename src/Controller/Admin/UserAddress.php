@@ -10,7 +10,7 @@ class UserAddress extends UserAddress_parent
         'locality',
         'streetName',
         'buildingNumber',
-        'subdevisionCode',
+        'subdivisionCode',
         'additionalInfo'
     ];
 
@@ -50,7 +50,7 @@ class UserAddress extends UserAddress_parent
         $predictionHTML = "";
         foreach ($this->predictions as $predictionKey) {
             $predictionHTML .= "<div class='prediction'>"
-                . $predictionKey . ": " . $prediction->$predictionKey . "</div>";
+                . $predictionKey . ": " . ($prediction->$predictionKey ?? "") . "</div>";
         }
 
         return $predictionHTML;
