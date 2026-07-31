@@ -2,9 +2,9 @@
 /**
  * This file contains translations.
  *
- * PHP Version 7
+ * PHP Version 8
  *
- * @package   Endereco\OxidClient\Translations
+ * @package   Endereco\Oxid7Client\Translations
  * @author    Ilja Weber <ilja.weber@mobilemojo.de>
  * @copyright 2019 mobilemojo – Apps & eCommerce UG (haftungsbeschränkt) & Co. KG
  *            (https://www.mobilemojo.de/)
