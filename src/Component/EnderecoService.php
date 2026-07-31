@@ -356,16 +356,4 @@ class EnderecoService
 
         return $statusCodes;
     }
-
-    public function shouldBeChecked($statusCodes)
-    {
-        return !(
-            in_array('address_not_found', $statusCodes) ||
-            in_array('address_needs_correction', $statusCodes) ||
-            in_array('address_correct', $statusCodes) ||
-            in_array('address_multiple_variants', $statusCodes) ||
-            in_array('address_of_not_supported_type', $statusCodes) ||
-            in_array('address_selected_by_customer', $statusCodes)
-        );
-    }
 }
