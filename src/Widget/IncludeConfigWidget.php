@@ -17,18 +17,16 @@ class IncludeConfigWidget extends \OxidEsales\Eshop\Application\Component\Widget
     protected $sThisTemplate = '@endereco-oxid7-client/enderecoconfig_default';
 
     /**
-     * Getter for protected property.
+     * Getter for the widget template.
+     *
+     * Called from render() rather than reading $sThisTemplate directly, so that a
+     * module extending this widget can override it to supply its own template.
      *
      * @return string
      */
     public function getThisTemplate()
     {
         return $this->sThisTemplate;
-    }
-
-    public function extendConfigMapping($configMapping = [])
-    {
-        return $configMapping;
     }
 
     /**
