@@ -19,16 +19,6 @@ $sLangName  = "Deutsch";
 // -------------------------------
 $aLang = [
     'charset' => 'UTF-8',
-    'ENDERECO_OXID7_CLIENT_MAIN' => 'Endereco',
-    'ENDERECO_OXID7_CLIENT_HOME' => 'Modul',
-    'ENDERECO_OXID7_CLIENT_SETTINGS' => 'Einstellungen',
-    'ENDERECOCLIENTOX_SETTINGS_STATUS' => 'Status:',
-    'ENDERECOCLIENTOX_SETTINGS_STATUS_OK' => 'Ok',
-    'ENDERECOCLIENTOX_SETTINGS_STATUS_OK_LONG' => ' - Die Verbindung zum Endereco-Server wurde erfolgreich hergestellt.',
-    'ENDERECOCLIENTOX_SETTINGS_STATUS_OK_HELP' => 'Du wurdest erfolgreich mit dem Endereco-Server verbunden. Die gebuchten Dienste können genutzt werden.',
-    'ENDERECOCLIENTOX_SETTINGS_STATUS_FAIL' => 'Verbindungsfehler',
-    'ENDERECOCLIENTOX_SETTINGS_STATUS_FAIL_LONG' => ' - Die Verbindung zum Endereco-Server konnte nicht hergestellt werden. Prüfe deinen API-Key.',
-    'ENDERECOCLIENTOX_SETTINGS_STATUS_FAIL_HELP' => 'Verbindung zum Endereco-Server fehlgeschlagen. Bitte überprüfe den API-Schlüssel. Kein API-Schlüssel? Kontaktiere uns unter info@endereco.de',
 
     'SHOP_MODULE_GROUP_ACCESS' => 'Zugangsdaten',
     'SHOP_MODULE_sAPIKEY' => 'API Schlüssel',
