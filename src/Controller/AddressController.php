@@ -2,11 +2,10 @@
 
 namespace Endereco\Oxid7Client\Controller;
 
-use Override;
 use OxidEsales\Eshop\Application\Model\User;
 use OxidEsales\Eshop\Application\Model\Address;
 use OxidEsales\Eshop\Core\Registry;
-use  Endereco\Oxid7Client\Component\EnderecoService;
+use Endereco\Oxid7Client\Component\EnderecoService;
 
 class AddressController extends \OxidEsales\Eshop\Application\Controller\FrontendController
 {

@@ -7,7 +7,6 @@ use OxidEsales\Eshop\Core\Request;
 use OxidEsales\Eshop\Core\Theme;
 use OxidEsales\EshopCommunity\Internal\Container\ContainerFactory;
 use OxidEsales\EshopCommunity\Internal\Framework\Module\Configuration\Bridge\ModuleConfigurationDaoBridgeInterface;
-use OxidEsales\EshopCommunity\Internal\Framework\Module\Facade\ModuleSettingServiceInterface;
 
 class IncludeConfigWidget extends \OxidEsales\Eshop\Application\Component\Widget\WidgetController
 {
