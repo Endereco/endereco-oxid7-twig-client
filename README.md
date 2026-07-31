@@ -10,11 +10,11 @@ Die Installation erfolgt in folgenden Schritten:
 composer require endereco/endereco-oxid7-twig-client
 ```
 
-Der Befehl lädt die neuste Version herunter. Um eine spezielle Version zu installieren, zum Beispiel *1.0*, kann
+Der Befehl lädt die neuste Version herunter. Um eine spezielle Version zu installieren, zum Beispiel *1.1.0*, kann
 der Befehl folgenderweise angepasst werden.
 
 ```bash
-composer require endereco/endereco-oxid7-twig-client:1.0
+composer require endereco/endereco-oxid7-twig-client:1.1.0
 ```
 
 2. Migrationen ausführen
