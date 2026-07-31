@@ -77,8 +77,8 @@ if [ ! -f "$SETUP_FLAG" ]; then
 
             echo "[setup] Running module migrations..."
             # Migrations add required DB columns (e.g. MOJOISO31662 on oxstates).
-            # oe:module:activate does not trigger onActivate (events[] is empty in metadata.php),
-            # so migrations are the only path to schema changes.
+            # They are the only path to schema changes: the module registers no
+            # activation event, so oe:module:activate does not touch the schema.
             vendor/bin/oe-eshop-doctrine_migration migrations:migrate --no-interaction 2>/dev/null || true
 
             echo "[setup] Regenerating database views..."
