@@ -22,7 +22,9 @@ $aLang = [
 
     'SHOP_MODULE_GROUP_ACCESS' => 'Access Data',
     'SHOP_MODULE_sAPIKEY' => 'Api Key',
+    'HELP_SHOP_MODULE_sAPIKEY' => 'You can request the API key free of charge at <a href="mailto:info@endereco.de">info@endereco.de</a>',
     'SHOP_MODULE_sSERVICEURL' => 'Service Server Url',
+    'HELP_SHOP_MODULE_sSERVICEURL' => 'Only the live URL should be entered here in shipped modules',
 
     'SHOP_MODULE_GROUP_AMS' => 'AMS',
     'SHOP_MODULE_sUSEAMS' => 'Adresscheck and InputAssistant is active',
@@ -30,6 +32,7 @@ $aLang = [
     'SHOP_MODULE_sCHECKPAYPAL' => 'Check PayPal Express Checkout customers (BETA)',
     'HELP_SHOP_MODULE_sCHECKALL' => 'Existing customers with incorrect unchecked address will receive address check predictions automatically',
     'SHOP_MODULE_sAMSBLURTRIGGER' => 'Trigger AddressCheck immediately after entering or changing the address',
+    'HELP_SHOP_MODULE_sAMSBLURTRIGGER' => 'When enabled, the address check is triggered as soon as the address has been entered. When disabled, the check runs when the "Continue" button is clicked.',
     'SHOP_MODULE_sAMSSubmitTrigger' => 'Check address on submit',
     'SHOP_MODULE_sAMSResumeSubmit' => 'Continue submit after the address has been selected',
     'SHOP_MODULE_bChangeFieldsOrder' => 'Optimize address fields order',
