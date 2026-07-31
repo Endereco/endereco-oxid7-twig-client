@@ -23,18 +23,9 @@
         if (!window.EnderecoIntegrator.$globalFilters) {
             window.EnderecoIntegrator.$globalFilters = {
                 anyActive: [],
-                anyMissing: [],
-                isModalAreaFree: []
+                anyMissing: []
             };
         }
-
-        window.EnderecoIntegrator.$globalFilters.isModalAreaFree.push(function(areaFree, reference) {
-            if (!window.EnderecoIntegrator.ready) {
-                return false;
-            } else {
-                return areaFree;
-            }
-        });
 
         function enderecoInitAMS(prefix, config, cb, withDelay = false) {
             const initializeAMS = async () => {

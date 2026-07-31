@@ -115,18 +115,6 @@
             window.EnderecoIntegrator.subdivisionMapping = JSON.parse('{{ enderecoclient.oSubdivisionMapping|escape('js') }}');
             window.EnderecoIntegrator.subdivisionMappingReverse = JSON.parse('{{ enderecoclient.oSubdivisionMappingReverse|escape('js') }}');
 
-            window.EnderecoIntegrator.checkAllCallback = function(EAO) {
-                if ('billing_address' === EAO.addressType) {
-                    if (document.querySelector('#userChangeAddress')) {
-                        document.querySelector('#userChangeAddress').click();
-                    }
-                } else if ('shipping_address' === EAO.addressType) {
-                    if (document.querySelector('.dd-available-addresses .dd-edit-shipping-address')) {
-                        document.querySelector('.dd-available-addresses .dd-edit-shipping-address').click();
-                    }
-                }
-            }
-
             window.EnderecoIntegrator.onLoad.forEach(function (callback) {
                 callback();
             });

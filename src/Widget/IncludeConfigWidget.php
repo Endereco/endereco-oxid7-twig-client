@@ -160,7 +160,6 @@ class IncludeConfigWidget extends \OxidEsales\Eshop\Application\Component\Widget
             'ux' => [
                 'resumeSubmit' => $this->toBool($settings['sAMSResumeSubmit'] ?? false),
                 'smartFill' => false,
-                'checkExisting' => $this->toBool($settings['sCHECKALL'] ?? false),
                 'changeFieldsOrder' => $this->toBool($settings['bChangeFieldsOrder'] ?? false),
                 'showEmailStatus' => $this->toBool($settings['bShowEmailserviceErrors'] ?? false),
                 'useStandardCss' => $this->toBool($settings['bUseCss'] ?? false),
