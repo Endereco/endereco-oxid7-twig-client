@@ -58,9 +58,10 @@ class ProxyController extends \OxidEsales\Eshop\Application\Controller\FrontendC
             $this->respondJson(['error' => 'Endereco configuration is incomplete.']);
         }
 
-        $transactionId = (string) ($payload['id'] ?? '');
+        // The JS SDK sends the Endereco session id as transaction id header.
+        $transactionId = trim((string) ($_SERVER['HTTP_X_TRANSACTION_ID'] ?? ''));
         if ('' === $transactionId) {
-            $transactionId = bin2hex(random_bytes(8));
+            $transactionId = 'not_set';
         }
 
         $client = new Client(['timeout' => 8.0]);
