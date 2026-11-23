@@ -33,6 +33,9 @@ class ProxyController extends \OxidEsales\Eshop\Application\Controller\FrontendC
             $this->respondJson(['error' => 'Invalid or missing session token.']);
         }
 
+        // Release the session lock before the remote request.
+        session_write_close();
+
         $payload = json_decode((string) file_get_contents('php://input'), true);
         if (!is_array($payload)) {
             http_response_code(400);
